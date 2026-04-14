@@ -1,4 +1,4 @@
-import { Activity, Download, ArrowUp, ArrowDown, Users, DollarSign, Plus } from "lucide-react";
+import { Activity, Download, ArrowUp, Users, DollarSign } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function AdminDashboardPage() {
@@ -99,8 +99,8 @@ export default function AdminDashboardPage() {
             {[40, 70, 45, 90, 65, 85, 100].map((h, i) => (
               <div key={i} className="flex flex-col items-center gap-2 w-full group">
                 <div className="w-full relative bg-slate-100 dark:bg-slate-700/50 rounded-t-xl h-48 flex items-end overflow-hidden">
-                  <div 
-                    className="w-full bg-emerald-500 dark:bg-emerald-400 rounded-t-sm group-hover:bg-emerald-400 dark:group-hover:bg-emerald-300 transition-all duration-500 relative" 
+                  <div
+                    className="w-full bg-emerald-500 dark:bg-emerald-400 rounded-t-sm group-hover:bg-emerald-400 dark:group-hover:bg-emerald-300 transition-all duration-500 relative"
                     style={{ height: `${h}%` }}
                   >
                     <div className="absolute opacity-0 group-hover:opacity-100 -top-8 left-1/2 -translate-x-1/2 bg-slate-800 dark:bg-slate-100 text-white dark:text-slate-900 text-xs py-1 px-2 rounded-md whitespace-nowrap transition-opacity shadow-lg shadow-black/10 z-10 font-medium">
