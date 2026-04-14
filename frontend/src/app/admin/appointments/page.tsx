@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { StatCard } from "@/components/shared/StatCard"
 
-// Mock data strictly supporting scheduling workflows
+
 const appointments = [
   {
     id: "APP001",
@@ -15,7 +15,7 @@ const appointments = [
     doctorName: "Dr. Emily Taylor",
     dateGroup: "Today",
     time: "10:00 AM",
-    status: "Scheduled", 
+    status: "Scheduled",
     type: "General Checkup",
     doctorStatus: "Available",
     doctorWorkload: "4 appts today",
@@ -27,7 +27,7 @@ const appointments = [
     doctorName: "Dr. Michael Chen",
     dateGroup: "Today",
     time: "11:30 AM",
-    status: "Completed", 
+    status: "Completed",
     type: "Cardiology",
     doctorStatus: "Available",
     doctorWorkload: "5 appts today",
@@ -38,7 +38,7 @@ const appointments = [
     doctorName: "Dr. Lisa Wang",
     dateGroup: "Today",
     time: "04:30 PM",
-    status: "Pending", 
+    status: "Pending",
     type: "Dermatology",
     doctorStatus: "Conflict",
     conflictReason: "Overlapping Surgery (4:00 PM)",
@@ -50,7 +50,7 @@ const appointments = [
     doctorName: "Dr. Emily Taylor",
     dateGroup: "Tomorrow",
     time: "09:00 AM",
-    status: "Cancelled", 
+    status: "Cancelled",
     type: "Pediatrics",
     doctorStatus: "Available",
     doctorWorkload: "3 appts tomorrow",
@@ -62,7 +62,7 @@ const appointments = [
     dateGroup: "Upcoming",
     dateStr: "Jan 25, 2024",
     time: "02:00 PM",
-    status: "Scheduled", 
+    status: "Scheduled",
     type: "Orthopedics",
     doctorStatus: "Available",
     doctorWorkload: "1 appt",
@@ -104,7 +104,7 @@ export default function AdminAppointmentsPage() {
 
   return (
     <div className="space-y-8 animate-in fade-in zoom-in-95 duration-700 max-w-[1600px] mx-auto pb-10">
-      
+
       {/* 1. Page Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6">
         <div>
@@ -146,12 +146,12 @@ export default function AdminAppointmentsPage() {
           trend="up"
           trendValue="Smooth operations"
         />
-        
+
         {/* Harmonized Soft Green "Next Available Slot" Card instead of Dark Blue */}
         <div className="bg-gradient-to-br from-emerald-50 to-teal-100 dark:from-emerald-900/30 dark:to-teal-900/20 p-5 rounded-[20px] border border-emerald-200/60 dark:border-emerald-800/50 shadow-sm flex flex-col justify-between transition-all hover:shadow-md hover:-translate-y-1">
           <div className="flex items-center justify-between">
-             <p className="text-sm font-semibold text-teal-800 dark:text-teal-400">Next Available Slot</p>
-             <Clock className="w-4 h-4 text-teal-600 dark:text-teal-500" />
+            <p className="text-sm font-semibold text-teal-800 dark:text-teal-400">Next Available Slot</p>
+            <Clock className="w-4 h-4 text-teal-600 dark:text-teal-500" />
           </div>
           <div className="mt-2">
             <p className="text-3xl font-extrabold text-teal-900 dark:text-teal-100 tracking-tight">12:30 PM</p>
@@ -165,24 +165,23 @@ export default function AdminAppointmentsPage() {
 
       {/* 3. Advanced Filtering & Control Bar */}
       <div className="flex flex-col gap-4 bg-white dark:bg-slate-800/80 p-4 rounded-[20px] shadow-sm border border-slate-100 dark:border-slate-700/50">
-        
+
         {/* Quick Filters Row */}
         <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0">
           <span className="text-xs font-semibold uppercase tracking-widest text-slate-400 mr-2 shrink-0">Views</span>
           {["All", "Today", "Upcoming", "Conflicts"].map(filter => (
-             <Button 
-                key={filter}
-                variant={activeFilter === filter ? "default" : "outline"}
-                size="sm"
-                onClick={() => setActiveFilter(filter)}
-                className={`rounded-full h-8 px-4 text-xs font-semibold transition-all ${
-                  activeFilter === filter 
-                    ? "bg-emerald-100 text-emerald-800 hover:bg-emerald-200 border-none shadow-sm dark:bg-emerald-900/60 dark:text-emerald-300" 
-                    : "border-slate-200 text-slate-500 hover:text-slate-800 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800"
+            <Button
+              key={filter}
+              variant={activeFilter === filter ? "default" : "outline"}
+              size="sm"
+              onClick={() => setActiveFilter(filter)}
+              className={`rounded-full h-8 px-4 text-xs font-semibold transition-all ${activeFilter === filter
+                  ? "bg-emerald-100 text-emerald-800 hover:bg-emerald-200 border-none shadow-sm dark:bg-emerald-900/60 dark:text-emerald-300"
+                  : "border-slate-200 text-slate-500 hover:text-slate-800 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800"
                 }`}
-             >
-                {filter} {filter === "Conflicts" && <span className="ml-1.5 w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />}
-             </Button>
+            >
+              {filter} {filter === "Conflicts" && <span className="ml-1.5 w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />}
+            </Button>
           ))}
         </div>
 
@@ -198,7 +197,7 @@ export default function AdminAppointmentsPage() {
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-          
+
           <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
             <Button variant="outline" className="h-11 px-4 rounded-xl border-slate-200 bg-white dark:bg-slate-800 dark:border-slate-700 shadow-sm text-slate-600 dark:text-slate-300 font-medium">
               <CalendarIcon className="mr-2 h-4 w-4 text-slate-400" /> Jan 20 - Jan 26
@@ -244,13 +243,11 @@ export default function AdminAppointmentsPage() {
                   const isLive = apt.isLive;
 
                   return (
-                    <div 
-                      key={apt.id} 
-                      className={`group relative flex flex-col lg:flex-row lg:items-center gap-5 p-4 lg:p-6 rounded-2xl border bg-white dark:bg-slate-800/90 shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ${
-                        isCompleted ? "opacity-50 grayscale-[0.2] hover:grayscale-0 hover:opacity-100 bg-slate-50/50 dark:bg-slate-900/50" : ""
-                      } ${
-                        isConflict ? "border-amber-400 dark:border-amber-600/60 shadow-amber-500/10" : isLive ? "border-emerald-300 dark:border-emerald-600/50 shadow-emerald-500/10 ring-1 ring-emerald-500/10" : "border-slate-100 dark:border-slate-700/50"
-                      }`}
+                    <div
+                      key={apt.id}
+                      className={`group relative flex flex-col lg:flex-row lg:items-center gap-5 p-4 lg:p-6 rounded-2xl border bg-white dark:bg-slate-800/90 shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ${isCompleted ? "opacity-50 grayscale-[0.2] hover:grayscale-0 hover:opacity-100 bg-slate-50/50 dark:bg-slate-900/50" : ""
+                        } ${isConflict ? "border-amber-400 dark:border-amber-600/60 shadow-amber-500/10" : isLive ? "border-emerald-300 dark:border-emerald-600/50 shadow-emerald-500/10 ring-1 ring-emerald-500/10" : "border-slate-100 dark:border-slate-700/50"
+                        }`}
                     >
                       {/* Sub-bg highlight for Live / Next slot */}
                       {isLive && (
@@ -281,7 +278,7 @@ export default function AdminAppointmentsPage() {
                         <div className="flex items-center gap-4">
                           <Avatar className={`h-12 w-12 border-2 border-white dark:border-slate-800 shadow-sm ${getPatientAvatarTint(apt.patientName)}`}>
                             <AvatarFallback className="font-extrabold text-sm bg-transparent">
-                              {apt.patientName.split(" ").map(n => n[0]).join("").substring(0,2)}
+                              {apt.patientName.split(" ").map(n => n[0]).join("").substring(0, 2)}
                             </AvatarFallback>
                           </Avatar>
                           <div className="min-w-0">
@@ -300,13 +297,13 @@ export default function AdminAppointmentsPage() {
                           <div className="min-w-0">
                             <h4 className="font-semibold text-slate-700 dark:text-slate-300 text-sm truncate">{apt.doctorName}</h4>
                             {isConflict ? (
-                               <p className="text-[11px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-widest mt-1 flex items-center gap-1.5 animate-pulse"><AlertTriangle className="h-3.5 w-3.5" /> {apt.conflictReason}</p>
+                              <p className="text-[11px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-widest mt-1 flex items-center gap-1.5 animate-pulse"><AlertTriangle className="h-3.5 w-3.5" /> {apt.conflictReason}</p>
                             ) : (
-                               <div className="flex items-center gap-2 mt-1">
-                                 <p className="text-xs font-medium text-emerald-600 dark:text-emerald-400">Available</p>
-                                 <span className="w-1 h-1 rounded-full bg-slate-300" />
-                                 <p className="text-[11px] text-slate-400 font-semibold">{apt.doctorWorkload}</p>
-                               </div>
+                              <div className="flex items-center gap-2 mt-1">
+                                <p className="text-xs font-medium text-emerald-600 dark:text-emerald-400">Available</p>
+                                <span className="w-1 h-1 rounded-full bg-slate-300" />
+                                <p className="text-[11px] text-slate-400 font-semibold">{apt.doctorWorkload}</p>
+                              </div>
                             )}
                           </div>
                         </div>
@@ -314,35 +311,34 @@ export default function AdminAppointmentsPage() {
 
                       {/* Status Badge */}
                       <div className="w-32 shrink-0 relative z-10 flex lg:justify-center">
-                        <span className={`inline-flex items-center justify-center w-full max-w-[120px] px-3 py-1.5 rounded-lg text-[10px] font-bold tracking-widest uppercase shadow-sm border transition-colors ${
-                          apt.status === "Scheduled" ? "bg-teal-50 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400 border-teal-200 dark:border-teal-800/50" :
-                          apt.status === "Completed" ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800/50" :
-                          apt.status === "Pending"   ? "bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-300 border-amber-300 dark:border-amber-700/60" :
-                          "bg-rose-50 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400 border-rose-200 dark:border-rose-800/50" // Cancelled
-                        }`}>
+                        <span className={`inline-flex items-center justify-center w-full max-w-[120px] px-3 py-1.5 rounded-lg text-[10px] font-bold tracking-widest uppercase shadow-sm border transition-colors ${apt.status === "Scheduled" ? "bg-teal-50 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400 border-teal-200 dark:border-teal-800/50" :
+                            apt.status === "Completed" ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800/50" :
+                              apt.status === "Pending" ? "bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-300 border-amber-300 dark:border-amber-700/60" :
+                                "bg-rose-50 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400 border-rose-200 dark:border-rose-800/50" // Cancelled
+                          }`}>
                           {apt.status}
                         </span>
                       </div>
 
                       {/* Prominent Action Hierarchy */}
                       <div className="flex items-center justify-end gap-2 lg:w-48 xl:w-56 shrink-0 relative z-10">
-                         {apt.status !== "Completed" && apt.status !== "Cancelled" && (
-                           <>
-                              {/* Primary Action Button */}
-                              <Button size="sm" className="h-9 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md shadow-emerald-500/20 active:scale-95 transition-all">
-                                <CheckCircle2 className="h-4 w-4 mr-1.5" />
-                                Confirm
-                              </Button>
-                              
-                              {/* Secondary Actions (Icons) */}
-                              <Button variant="ghost" size="icon" className="h-9 w-9 text-slate-400 hover:text-teal-600 hover:bg-teal-50 dark:hover:bg-teal-900/20 transition-all active:scale-95" title="Reschedule">
-                                <CalendarClock className="h-4 w-4" />
-                              </Button>
-                              <Button variant="ghost" size="icon" className="h-9 w-9 text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20 transition-all active:scale-95" title="Cancel">
-                                <XCircle className="h-4 w-4" />
-                              </Button>
-                           </>
-                         )}
+                        {apt.status !== "Completed" && apt.status !== "Cancelled" && (
+                          <>
+                            {/* Primary Action Button */}
+                            <Button size="sm" className="h-9 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md shadow-emerald-500/20 active:scale-95 transition-all">
+                              <CheckCircle2 className="h-4 w-4 mr-1.5" />
+                              Confirm
+                            </Button>
+
+                            {/* Secondary Actions (Icons) */}
+                            <Button variant="ghost" size="icon" className="h-9 w-9 text-slate-400 hover:text-teal-600 hover:bg-teal-50 dark:hover:bg-teal-900/20 transition-all active:scale-95" title="Reschedule">
+                              <CalendarClock className="h-4 w-4" />
+                            </Button>
+                            <Button variant="ghost" size="icon" className="h-9 w-9 text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20 transition-all active:scale-95" title="Cancel">
+                              <XCircle className="h-4 w-4" />
+                            </Button>
+                          </>
+                        )}
                       </div>
                     </div>
                   );
