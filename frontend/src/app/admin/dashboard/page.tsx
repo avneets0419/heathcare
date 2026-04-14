@@ -1,19 +1,13 @@
 "use client"
 
-import { Download, ArrowUp, Users, DollarSign, ChevronRight, AlertTriangle, CalendarCheck, Sparkles, TrendingUp, UserPlus, FileText, Clock, Bell, CheckCircle2, MoreVertical, ShieldAlert } from "lucide-react";
+import { Users, DollarSign, AlertTriangle, TrendingUp, UserPlus, Clock, MoreVertical } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { adminDashboardService } from "@/services/adminDashboard.service";
 import { useEffect, useState } from "react";
+import { DashboardData } from "@/types/dashboard.types";
 
-interface DashboardData {
-  revenue: number;
-  patients: number;
-  doctors: number;
-  alerts: any[];
-  traffic: any[];
-  appointments: any[];
-}
+
 export default function AdminDashboardPage() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -24,7 +18,7 @@ export default function AdminDashboardPage() {
       try {
         const res = await adminDashboardService.getDashboard();
         setData(res);
-      } catch (err: any) {
+      } catch (err: unknown) {
         setError("Failed to load dashboard");
       } finally {
         setLoading(false);
