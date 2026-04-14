@@ -1,156 +1,292 @@
-import { Activity, Download, ArrowUp, Users, DollarSign } from "lucide-react";
+"use client"
+
+import { Download, ArrowUp, Users, DollarSign, ChevronRight, AlertTriangle, CalendarCheck, Sparkles, TrendingUp, UserPlus, FileText, Clock, Bell, CheckCircle2, MoreVertical, ShieldAlert } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 
 export default function AdminDashboardPage() {
   return (
-    <div className="space-y-8 animate-in fade-in zoom-in-95 duration-700">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
-            Hospital Overview
+    <div className="space-y-8 animate-in fade-in zoom-in-95 duration-700 max-w-[1600px] mx-auto pb-12">
+
+      {/* 1. Header & Actions */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6">
+        <div className="relative">
+          <div className="absolute -left-4 -top-4 w-20 h-20 bg-emerald-400/20 rounded-full blur-3xl pointer-events-none" />
+          <h1 className="text-4xl font-black tracking-tight text-slate-900 dark:text-white flex items-center gap-3 relative z-10">
+            Control Center
           </h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-            Track key metrics, patient footfall, and generate reports.
+          <p className="text-base text-slate-500 dark:text-slate-400 mt-2 font-medium max-w-xl relative z-10">
+            Real-time analytics, hospital throughput, and high-priority administrative tasks.
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          <Button variant="outline" className="text-slate-600 bg-white/50 dark:bg-slate-800/50 hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-slate-800 transition-all">
-            <Download className="mr-2 h-4 w-4" /> Export Data
+        <div className="flex items-center gap-4">
+          <Button variant="outline" className="h-11 px-5 rounded-xl border-slate-200 text-slate-600 bg-white dark:bg-slate-800/80 hover:bg-slate-50 hover:text-slate-900 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800 shadow-sm transition-all active:scale-95 font-semibold group">
+            <Download className="mr-2 h-4 w-4 group-hover:-translate-y-0.5 transition-transform" /> Export Data
           </Button>
-          <Button className="bg-primary text-white shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-0.5 transition-all">
-            Generate Report
+          <Button className="h-11 px-6 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 hover:-translate-y-0.5 transition-all active:scale-95 font-bold tracking-wide flex items-center group">
+            <FileText className="mr-2 h-4 w-4 group-hover:scale-110 transition-transform" /> Generate Report
           </Button>
         </div>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        {/* Main Widget: Revenue (Takes 2 cols, standout color) */}
-        <div className="lg:col-span-2 relative overflow-hidden bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 dark:from-emerald-600 dark:to-teal-900 p-6 rounded-3xl flex flex-col justify-between text-white shadow-xl shadow-emerald-500/20 transition-transform hover:-translate-y-1 duration-300">
-          <div className="absolute top-0 right-0 p-4 opacity-10">
-            <DollarSign className="w-32 h-32" />
+      {/* 2. Critical Insight / Alert Bar */}
+      <div className="bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800/50 rounded-2xl p-1 shadow-sm flex flex-col sm:flex-row items-center gap-4 relative overflow-hidden transition-all hover:shadow-md hover:border-rose-300">
+        <div className="absolute top-0 left-0 w-1.5 h-full bg-rose-500" />
+        <div className="flex items-center gap-4 w-full p-3 pl-5">
+          <div className="bg-rose-100 dark:bg-rose-900/60 p-2.5 rounded-xl text-rose-600 dark:text-rose-400">
+            <AlertTriangle className="h-6 w-6 animate-pulse" strokeWidth={2.5} />
           </div>
-          <div className="relative z-10 flex items-center justify-between mb-8">
-            <h3 className="font-medium text-emerald-100 flex items-center gap-2">
-              <DollarSign className="h-5 w-5" /> Total Revenue
+          <div className="flex-1 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h4 className="text-base font-black text-rose-900 dark:text-rose-300">Immediate Action Required</h4>
+              <p className="text-sm font-semibold text-rose-700/90 dark:text-rose-400/80 mt-0.5">3 doctors have pending leave requests overlapping with peak surgery hours.</p>
+            </div>
+            <Button className="shrink-0 bg-rose-600 hover:bg-rose-700 text-white shadow-lg shadow-rose-600/20 border-0 font-extrabold active:scale-95 transition-all rounded-xl h-10 px-5 text-xs uppercase tracking-widest flex items-center">
+              Review Now &rarr;
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      {/* 3. KPI Cards */}
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+
+        {/* Primary Card: Revenue */}
+        <div className="xl:col-span-2 relative overflow-hidden bg-gradient-to-br from-emerald-600 via-teal-600 to-slate-900 dark:from-emerald-800 dark:to-slate-950 p-8 rounded-3xl flex flex-col justify-between text-white shadow-2xl shadow-emerald-600/20 transition-all hover:shadow-emerald-600/30 hover:-translate-y-1 duration-500 group border border-emerald-500/50">
+          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay pointer-events-none" />
+          <div className="absolute -right-4 -bottom-12 opacity-5 mix-blend-overlay group-hover:scale-110 group-hover:-rotate-6 transition-all duration-1000 pointer-events-none">
+            <DollarSign className="w-80 h-80" strokeWidth={3} />
+          </div>
+
+          <div className="relative z-10 flex items-center justify-between mb-12">
+            <h3 className="font-bold text-emerald-50 text-lg flex items-center gap-3 tracking-tight">
+              <span className="p-2.5 bg-white/10 rounded-2xl backdrop-blur-md border border-white/10 shadow-inner">
+                <DollarSign className="h-5 w-5 text-emerald-100" />
+              </span>
+              Gross Revenue
             </h3>
-            <span className="bg-white/20 text-white text-xs font-semibold px-2 py-1 rounded-full backdrop-blur-md">
-              This Month
+            <span className="bg-white/10 text-white text-[10px] font-extrabold uppercase tracking-widest px-3 py-1.5 rounded-full backdrop-blur-md shadow-inner border border-white/20 flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" /> Live Month
             </span>
           </div>
+
+          <div className="relative z-10 flex items-end justify-between">
+            <div>
+              <p className="text-6xl font-black mb-3 tracking-tighter drop-shadow-xl text-transparent bg-clip-text bg-gradient-to-br from-white to-emerald-100">$84,520</p>
+              <div className="flex items-center text-xs font-bold text-emerald-50 bg-black/20 w-max px-3 py-1.5 rounded-xl backdrop-blur-md border border-white/10 shadow-sm">
+                <TrendingUp className="h-3.5 w-3.5 mr-1.5 text-emerald-400" />
+                <span>+12.5% projected vs last month</span>
+              </div>
+            </div>
+
+            {/* Mini bar chart */}
+            <div className="hidden sm:flex items-end gap-1.5 h-16 opacity-80">
+              {[30, 45, 25, 60, 80, 50, 95].map((val, i) => (
+                <div key={i} className="w-2.5 bg-white/20 rounded-full hover:bg-white/80 transition-all cursor-pointer" style={{ height: `${val}%` }} />
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Secondary Card: Total Patients */}
+        <div className="bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-800/80 p-8 rounded-3xl border border-slate-200/60 dark:border-slate-700/50 shadow-lg shadow-slate-200/40 dark:shadow-black/20 transition-all hover:-translate-y-1 hover:shadow-xl duration-500 flex flex-col justify-between group relative overflow-hidden">
+          <div className="absolute -right-8 -top-8 w-32 h-32 bg-sky-400/10 rounded-full blur-3xl group-hover:bg-sky-400/20 transition-colors pointer-events-none" />
+
+          <div className="flex items-start justify-between mb-8 relative z-10">
+            <div className="relative">
+              <div className="absolute inset-0 bg-sky-400/20 blur-md rounded-2xl scale-110 opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="relative w-12 h-12 rounded-2xl bg-sky-50 dark:bg-sky-900/30 flex items-center justify-center group-hover:rotate-3 transition-transform duration-300 shadow-sm border border-sky-100/50 dark:border-sky-800/30">
+                <Users className="h-5 w-5 text-sky-600 dark:text-sky-400" />
+              </div>
+            </div>
+            <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-sky-600 rounded-full">
+              <MoreVertical className="h-4 w-4" />
+            </Button>
+          </div>
           <div className="relative z-10">
-            <p className="text-5xl font-extrabold mb-2 tracking-tight">$84,520</p>
-            <div className="flex items-center text-sm font-medium text-emerald-300">
-              <ArrowUp className="h-4 w-4 mr-1" />
-              <span>+12.5% vs last month</span>
+            <h3 className="font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest text-xs mb-1">Total Patients</h3>
+            <div className="flex items-end gap-3 mb-2">
+              <p className="text-4xl font-black text-slate-900 dark:text-white tracking-tight">1,234</p>
+              <span className="mb-1 text-sm font-bold text-sky-600 flex items-center bg-sky-50 px-2 py-0.5 rounded-md"><ArrowUp className="w-3 h-3 mr-1" /> 4%</span>
             </div>
+            <p className="text-xs font-semibold text-slate-400">Peak hour: 10:00 AM</p>
           </div>
         </div>
 
-        {/* Widget 2 */}
-        <div className="bg-white dark:bg-slate-800/80 p-6 rounded-3xl border border-slate-100 dark:border-slate-700/50 shadow-sm hover:shadow-md transition-all hover:-translate-y-1 duration-300 flex flex-col justify-between group">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-medium text-slate-500 dark:text-slate-400">
-              Total Patients
-            </h3>
-            <div className="w-10 h-10 rounded-xl bg-sky-50 dark:bg-sky-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
-              <Users className="h-5 w-5 text-sky-500" />
+        {/* Secondary Card: Active Doctors */}
+        <div className="bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-800/80 p-8 rounded-3xl border border-slate-200/60 dark:border-slate-700/50 shadow-lg shadow-slate-200/40 dark:shadow-black/20 transition-all hover:-translate-y-1 hover:shadow-xl duration-500 flex flex-col justify-between group relative overflow-hidden">
+          <div className="absolute -right-8 -top-8 w-32 h-32 bg-emerald-400/10 rounded-full blur-3xl group-hover:bg-emerald-400/20 transition-colors pointer-events-none" />
+
+          <div className="flex items-start justify-between mb-8 relative z-10">
+            <div className="relative">
+              <div className="absolute inset-0 bg-emerald-400/20 blur-md rounded-2xl scale-110 opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="relative w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-900/30 flex items-center justify-center group-hover:rotate-3 transition-transform duration-300 shadow-sm border border-emerald-100/50 dark:border-emerald-800/30">
+                <UserPlus className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+              </div>
             </div>
+            <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-emerald-600 rounded-full">
+              <MoreVertical className="h-4 w-4" />
+            </Button>
           </div>
-          <div>
-            <p className="text-4xl font-bold text-slate-800 dark:text-slate-100 mb-2">1,234</p>
-            <div className="flex items-center text-sm font-medium text-emerald-500">
-              <ArrowUp className="h-4 w-4 mr-1" />
-              <span>+4% this week</span>
+          <div className="relative z-10">
+            <h3 className="font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest text-xs mb-1">Active Doctors</h3>
+            <div className="flex items-end gap-3 mb-2">
+              <p className="text-4xl font-black text-slate-900 dark:text-white tracking-tight">45</p>
+              <p className="mb-1 text-sm font-bold text-slate-500 flex items-center">/ 50 limit</p>
             </div>
+            <p className="text-xs font-semibold text-emerald-600 flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5" /> Optimal Coverage</p>
           </div>
         </div>
 
-        {/* Widget 3 */}
-        <div className="bg-white dark:bg-slate-800/80 p-6 rounded-3xl border border-slate-100 dark:border-slate-700/50 shadow-sm hover:shadow-md transition-all hover:-translate-y-1 duration-300 flex flex-col justify-between group">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-medium text-slate-500 dark:text-slate-400">
-              Active Doctors
-            </h3>
-            <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
-              <Activity className="h-5 w-5 text-emerald-500" />
-            </div>
-          </div>
-          <div>
-            <p className="text-4xl font-bold text-slate-800 dark:text-slate-100 mb-2">45</p>
-            <div className="flex items-center text-sm font-medium text-emerald-500">
-              <ArrowUp className="h-4 w-4 mr-1" />
-              <span>+3 new this week</span>
-            </div>
-          </div>
-        </div>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
-        <div className="lg:col-span-4 bg-white dark:bg-slate-800/80 rounded-3xl border border-slate-100 dark:border-slate-700/50 p-6 flex flex-col shadow-sm">
-          <div className="flex justify-between items-center mb-6">
-            <h3 className="font-semibold text-slate-800 dark:text-slate-100">Patient Footfall</h3>
-            <select className="text-sm border-slate-200 dark:border-slate-700 bg-transparent text-slate-600 dark:text-slate-300 rounded-lg focus:ring-primary focus:border-primary">
+      {/* 4. Priority Tasks Bar */}
+      <div className="bg-white dark:bg-slate-800/80 rounded-3xl border border-slate-200/60 dark:border-slate-700/50 p-3 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
+        <div className="flex items-center gap-3 px-4 py-2 text-sm font-black text-slate-800 dark:text-slate-100 border-b md:border-b-0 md:border-r border-slate-100 dark:border-slate-700 w-full md:w-auto uppercase tracking-wider">
+          <ShieldAlert className="h-5 w-5 text-emerald-500" /> Priority Tasks
+        </div>
+        <div className="flex-1 flex flex-wrap md:flex-nowrap overflow-x-auto gap-3 px-2 no-scrollbar w-full">
+          <button className="flex items-center gap-2 bg-rose-50 border border-rose-100 hover:border-rose-300 text-rose-700 hover:bg-rose-100 font-bold rounded-xl text-xs px-4 py-2.5 transition-all shadow-sm hover:shadow active:scale-95 flex-shrink-0 group">
+            <span className="w-2 h-2 rounded-full bg-rose-500 group-hover:scale-125 transition-transform" /> Review 2 Complaints
+          </button>
+          <button className="flex items-center gap-2 bg-slate-50 border border-slate-200 hover:border-emerald-200 text-slate-700 hover:text-emerald-700 hover:bg-emerald-50 font-bold rounded-xl text-xs px-4 py-2.5 transition-all shadow-sm hover:shadow active:scale-95 flex-shrink-0 group">
+            <span className="w-2 h-2 rounded-full bg-slate-300 group-hover:bg-emerald-500 transition-colors" /> Approve Equipment Order
+          </button>
+          <button className="flex items-center gap-2 bg-slate-50 border border-slate-200 hover:border-emerald-200 text-slate-700 hover:text-emerald-700 hover:bg-emerald-50 font-bold rounded-xl text-xs px-4 py-2.5 transition-all shadow-sm hover:shadow active:scale-95 flex-shrink-0 group">
+            <span className="w-2 h-2 rounded-full bg-slate-300 group-hover:bg-emerald-500 transition-colors" /> Audit Weekly Logs
+          </button>
+        </div>
+        <Button variant="ghost" className="text-emerald-600 shrink-0 pr-4 text-xs font-bold hover:bg-transparent hover:text-emerald-800">
+          View Task Portal &rarr;
+        </Button>
+      </div>
+
+      {/* 5. Chart + Timeline Row */}
+      <div className="grid gap-6 lg:grid-cols-12 pt-2">
+
+        {/* Traffic Density Chart */}
+        <div className="lg:col-span-7 bg-white dark:bg-slate-800/90 rounded-3xl border border-slate-200/60 dark:border-slate-700/50 p-8 flex flex-col shadow-lg shadow-slate-200/30 transition-all">
+          <div className="flex justify-between items-start mb-6 pb-4 border-b border-slate-100 dark:border-slate-700/50">
+            <div>
+              <h3 className="text-xl font-black text-slate-900 dark:text-white">Traffic Density</h3>
+              <p className="text-xs font-semibold text-slate-400 mt-1 uppercase tracking-wider">Weekly Output Data</p>
+            </div>
+            <select className="h-10 px-2 text-sm font-bold border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 rounded-xl focus:ring-emerald-500/30 focus:border-emerald-500 outline-none cursor-pointer shadow-sm transition-shadow hover:shadow-md">
               <option>This Week</option>
               <option>Last Week</option>
             </select>
           </div>
-          {/* Mock Chart Area */}
-          <div className="flex-1 flex items-end gap-2 justify-between mt-auto pt-8">
-            {[40, 70, 45, 90, 65, 85, 100].map((h, i) => (
-              <div key={i} className="flex flex-col items-center gap-2 w-full group">
-                <div className="w-full relative bg-slate-100 dark:bg-slate-700/50 rounded-t-xl h-48 flex items-end overflow-hidden">
-                  <div
-                    className="w-full bg-emerald-500 dark:bg-emerald-400 rounded-t-sm group-hover:bg-emerald-400 dark:group-hover:bg-emerald-300 transition-all duration-500 relative"
-                    style={{ height: `${h}%` }}
-                  >
-                    <div className="absolute opacity-0 group-hover:opacity-100 -top-8 left-1/2 -translate-x-1/2 bg-slate-800 dark:bg-slate-100 text-white dark:text-slate-900 text-xs py-1 px-2 rounded-md whitespace-nowrap transition-opacity shadow-lg shadow-black/10 z-10 font-medium">
-                      {h * 12} pts
+
+          {/* Chart with Y-axis, bars, X-axis */}
+          <div className="flex mt-2 pt-6 relative">
+
+            {/* Y-Axis */}
+            <div className="flex flex-col justify-between items-end pr-4 border-r border-slate-100 dark:border-slate-700 pb-8 shrink-0 w-12 z-20">
+              <span className="text-[10px] font-bold text-slate-400">100</span>
+              <span className="text-[10px] font-bold text-slate-400">75</span>
+              <span className="text-[10px] font-bold text-slate-400">50</span>
+              <span className="text-[10px] font-bold text-slate-400">25</span>
+              <span className="text-[10px] font-bold text-slate-400">0</span>
+            </div>
+
+            <div className="absolute -left-12 top-1/2 -rotate-90 -translate-y-1/2 text-[10px] font-black uppercase tracking-widest text-slate-400 select-none">
+              Patient Volume
+            </div>
+
+            <div className="flex-1 flex items-end justify-around relative pl-2 pb-8 h-64">
+              {/* Average dotted line */}
+              <div className="absolute left-0 right-0 bottom-[65%] border-t-2 border-dashed border-slate-200 dark:border-slate-700 w-full z-0 flex items-center">
+                <span className="absolute -top-3.5 right-0 bg-slate-100 dark:bg-slate-800 text-[10px] font-black uppercase text-slate-400 px-2 py-0.5 rounded-full shadow-sm z-20">AVG 65</span>
+              </div>
+
+              {[40, 60, 45, 95, 65, 80, 50].map((h, i) => {
+                const isPeak = h === 95;
+                return (
+                  <div key={i} className="flex flex-col items-center gap-3 w-full group cursor-crosshair relative z-10 h-full justify-end">
+                    <div className={`w-3/4 relative rounded-md flex items-end overflow-hidden transition-all duration-500 h-full ${isPeak ? 'bg-emerald-50 max-w-[48px]' : 'bg-slate-50 max-w-[40px]'}`}>
+                      <div
+                        className={`w-full rounded-t-md transition-all duration-700 relative ${isPeak ? "bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.4)]" : "bg-slate-300 group-hover:bg-emerald-400"}`}
+                        style={{ height: `${h}%` }}
+                      >
+                        <div className="absolute opacity-0 group-hover:opacity-100 -top-8 left-1/2 -translate-x-1/2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[10px] py-1 px-2 rounded-lg whitespace-nowrap transition-all shadow-xl z-20 font-bold scale-90 group-hover:scale-100 pointer-events-none">
+                          {h} pts
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* X-Axis Label */}
+                    <span className="absolute -bottom-6 text-[10px] font-black text-slate-500 group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors uppercase tracking-wider">
+                      {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][i]}
+                    </span>
+
+                    {isPeak && (
+                      <span className="absolute -top-6 text-[9px] font-black tracking-widest text-emerald-600 bg-emerald-50 px-2 py-1 rounded-md">PEAK</span>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        {/* Upcoming Pipeline / Timeline */}
+        <div className="lg:col-span-5 bg-white dark:bg-slate-800/90 border border-slate-200/60 dark:border-slate-700/50 rounded-3xl p-8 shadow-lg shadow-slate-200/30 flex flex-col relative overflow-hidden">
+          <div className="flex justify-between items-center mb-8 pb-4 border-b border-slate-100 dark:border-slate-700/50 relative z-10">
+            <div>
+              <h3 className="text-xl font-black text-slate-900 dark:text-white">Upcoming Pipeline</h3>
+              <p className="text-xs font-semibold text-slate-400 mt-1 uppercase tracking-wider">Next 4 Hours</p>
+            </div>
+            <Button variant="ghost" size="icon" className="text-slate-400 hover:text-emerald-600 bg-slate-50 rounded-full h-8 w-8">
+              <MoreVertical className="w-4 h-4" />
+            </Button>
+          </div>
+
+          <div className="relative pl-6 space-y-8 pb-4 z-10">
+            {/* Vertical timeline connector */}
+            <div className="absolute left-[11px] top-2 bottom-0 w-[2px] bg-slate-100 dark:bg-slate-800 z-0" />
+
+            {[
+              { id: 1, name: "Aarav Sharma", type: "General Consult", time: "LIVE", active: true },
+              { id: 2, name: "Priya Nair", type: "Cardiology", time: "11:30 AM", active: false },
+              { id: 3, name: "Rohan Mehta", type: "Dental", time: "01:15 PM", active: false },
+            ].map((patient) => (
+              <div key={patient.id} className="relative group cursor-pointer z-10">
+                {/* Timeline node */}
+                <div className={`absolute -left-8 top-1.5 w-3.5 h-3.5 rounded-full border-2 bg-white ${patient.active ? 'border-emerald-500 ring-4 ring-emerald-500/20 animate-pulse' : 'border-slate-300 group-hover:border-emerald-400 transition-colors'}`} />
+
+                <div className={`flex flex-col p-4 rounded-2xl border transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-1 ${patient.active ? 'border-emerald-300 bg-emerald-50/50 dark:bg-emerald-900/10 hover:border-emerald-400 shadow-emerald-500/10' : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-slate-300'}`}>
+                  <div className="flex justify-between items-start">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm shadow-sm border ${patient.active ? 'bg-emerald-600 text-white border-emerald-700' : 'bg-slate-50 text-slate-700 border-slate-200 group-hover:bg-slate-100 group-hover:text-emerald-700'}`}>
+                        {patient.name.charAt(0)}
+                      </div>
+                      <div>
+                        <p className="font-extrabold text-sm text-slate-900 dark:text-slate-100">{patient.name}</p>
+                        <p className="text-xs font-semibold text-slate-500 mt-0.5 uppercase tracking-wider">{patient.type}</p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      {patient.active ? (
+                        <span className="text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-md text-white bg-emerald-500 shadow-sm flex items-center gap-1.5 animate-in fade-in zoom-in">
+                          <Clock className="w-3 h-3" /> NEXT UP
+                        </span>
+                      ) : (
+                        <span className="text-xs font-bold text-slate-500 group-hover:text-slate-800 transition-colors">{patient.time}</span>
+                      )}
                     </div>
                   </div>
                 </div>
-                <span className="text-xs text-slate-400 font-medium">
-                  {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][i]}
-                </span>
               </div>
             ))}
           </div>
+
+          <Button className="w-full mt-4 bg-slate-50 hover:bg-slate-100 text-slate-600 font-bold border border-slate-200 shadow-sm transition-colors text-xs uppercase tracking-widest rounded-xl h-11">
+            Expand Timeline &rarr;
+          </Button>
         </div>
-        <div className="lg:col-span-3 bg-white dark:bg-slate-800/80 border border-slate-100 dark:border-slate-700/50 rounded-3xl p-6 shadow-sm flex flex-col">
-          <div className="flex justify-between items-center mb-6">
-            <h3 className="font-semibold text-slate-800 dark:text-slate-100">Recent Appointments</h3>
-            <Button variant="ghost" size="sm" className="text-primary h-8 px-2">View All</Button>
-          </div>
-          <div className="space-y-4">
-            {[
-              { id: 1, name: "Aarav Sharma", type: "General Checkup", time: "10:00 AM", status: "Confirmed", color: "text-emerald-700 bg-emerald-100 dark:bg-emerald-900/40 dark:text-emerald-300" },
-              { id: 2, name: "Priya Nair", type: "Cardiology", time: "11:30 AM", status: "Pending", color: "text-amber-700 bg-amber-100 dark:bg-amber-900/40 dark:text-amber-300" },
-              { id: 3, name: "Rohan Mehta", type: "Dental", time: "01:15 PM", status: "Confirmed", color: "text-emerald-700 bg-emerald-100 dark:bg-emerald-900/40 dark:text-emerald-300" },
-              { id: 4, name: "Neha Gupta", type: "Neurology", time: "03:00 PM", status: "Cancelled", color: "text-rose-700 bg-rose-100 dark:bg-rose-900/40 dark:text-rose-300" },
-            ].map((patient) => (
-              <div key={patient.id} className="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors border border-transparent hover:border-slate-100 dark:hover:border-slate-700 cursor-pointer">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-100 to-teal-100 dark:from-emerald-900/50 dark:to-teal-900/50 flex items-center justify-center text-teal-700 dark:text-teal-300 font-bold shadow-sm">
-                    {patient.name.charAt(0)}
-                  </div>
-                  <div>
-                    <p className="font-semibold text-sm text-slate-800 dark:text-slate-200">{patient.name}</p>
-                    <p className="text-xs text-slate-500 flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-slate-300 dark:bg-slate-600" />
-                      {patient.type}
-                    </p>
-                  </div>
-                </div>
-                <div className="text-right flex flex-col items-end gap-1">
-                  <p className="text-sm font-medium text-slate-700 dark:text-slate-300">{patient.time}</p>
-                  <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${patient.color}`}>
-                    {patient.status}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+
       </div>
+
     </div>
   );
 }
