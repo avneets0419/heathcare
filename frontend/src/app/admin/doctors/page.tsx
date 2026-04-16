@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { StatCard } from "@/components/shared/StatCard"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { adminService } from "@/services/admin.service"
+import api from "@/lib/axios"
 
 export interface Doctor {
   id: string;
@@ -21,7 +22,7 @@ export interface Doctor {
 
 const getAvatarStyle = (name: string) => {
   if (!name) return "bg-emerald-100 text-emerald-700";
-  const charCode = name.charCodeAt(4) || 0; 
+  const charCode = name.charCodeAt(4) || 0;
   const styles = [
     "bg-gradient-to-br from-emerald-100 to-teal-100 text-teal-700 dark:from-emerald-900/50 dark:to-teal-900/50 dark:text-teal-300",
     "bg-gradient-to-br from-emerald-50 to-green-100 text-emerald-700 dark:from-emerald-900/40 dark:to-green-900/40 dark:text-emerald-300",
@@ -39,20 +40,29 @@ export default function AdminDoctorsPage() {
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingDoc, setEditingDoc] = useState<Doctor | null>(null)
-  
+
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', specialization: '', experience: '' })
 
   const fetchDoctors = async () => {
-    setLoading(true)
+    setLoading(true);
+
     try {
-      const data = await adminService.getDoctors(searchQuery, specialization);
-      setDoctors(data)
+      const token = localStorage.getItem("token"); // ✅ get token
+
+
+      const res = await api.get("/admin/doctors", {
+        headers: {
+          Authorization: `Bearer ${token}`, // ✅ force send token
+        },
+      });
+
+      setDoctors(res.data);
     } catch (err) {
-      console.error(err)
+      console.error("ERROR:", err);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     const timer = setTimeout(() => fetchDoctors(), 400)
@@ -61,13 +71,20 @@ export default function AdminDoctorsPage() {
 
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to completely remove this doctor?')) return;
+
     try {
-      await adminService.deleteDoctor(id);
+      const token = localStorage.getItem("token");
+      await api.delete(`/admin/doctors/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // ✅ added
+        },
+      });
+
       fetchDoctors();
     } catch (e) {
       alert('Error deleting doctor');
     }
-  }
+  };
 
   const openNewModal = () => {
     setEditingDoc(null);
@@ -83,18 +100,30 @@ export default function AdminDoctorsPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     try {
+      const token = localStorage.getItem("token");
       if (editingDoc) {
-        await adminService.updateDoctor(editingDoc.id, formData);
+
+        await api.put(`/admin/doctors/${editingDoc.id}`, formData, {
+          headers: {
+            Authorization: `Bearer ${token}`, // ✅ added
+          },
+        });
       } else {
-        await adminService.createDoctor(formData);
+        await api.post(`/admin/doctors`, formData, {
+          headers: {
+            Authorization: `Bearer ${token}`, // ✅ added
+          },
+        });
       }
+
       setIsModalOpen(false);
       fetchDoctors();
     } catch (err) {
       alert("Error saving doctor");
     }
-  }
+  };
 
   return (
     <div className="space-y-10 animate-in fade-in zoom-in-95 duration-700 relative">
@@ -150,7 +179,7 @@ export default function AdminDoctorsPage() {
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-          
+
           <div className="flex items-center gap-3 w-full sm:w-auto">
             <select value={specialization} onChange={(e) => setSpecialization(e.target.value)} className="h-11 px-4 text-sm bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-emerald-500/30 focus:border-emerald-500 outline-none cursor-pointer w-full sm:w-auto shadow-sm">
               <option value="">All Specializations</option>
@@ -181,8 +210,8 @@ export default function AdminDoctorsPage() {
             </div>
           ) : (
             doctors.map((doctor) => (
-              <div 
-                key={doctor.id} 
+              <div
+                key={doctor.id}
                 className="group flex flex-col lg:grid lg:grid-cols-12 gap-4 items-center bg-white dark:bg-slate-800/80 p-4 lg:px-6 rounded-2xl border border-slate-100 dark:border-slate-700/50 shadow-sm hover:shadow-md hover:-translate-y-0.5 hover:border-emerald-100 dark:hover:border-emerald-900/30 transition-all duration-300"
               >
                 {/* Profile */}
@@ -218,11 +247,10 @@ export default function AdminDoctorsPage() {
 
                 {/* Status */}
                 <div className="col-span-2 w-full lg:w-auto">
-                  <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase ${
-                    doctor.status === "Active" 
-                      ? "bg-emerald-100/80 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400" 
-                      : "bg-amber-100/80 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400"
-                  }`}>
+                  <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase ${doctor.status === "Active"
+                    ? "bg-emerald-100/80 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400"
+                    : "bg-amber-100/80 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400"
+                    }`}>
                     {doctor.status === "Active" && <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5 animate-pulse" />}
                     {doctor.status === "On Leave" && <span className="w-1.5 h-1.5 rounded-full bg-amber-500 mr-1.5" />}
                     {doctor.status}
@@ -256,30 +284,30 @@ export default function AdminDoctorsPage() {
                 <X className="h-6 w-6" />
               </button>
             </div>
-            
+
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Full Name</label>
-                  <Input required placeholder="Dr. John Doe" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="bg-slate-50 dark:bg-slate-900" />
+                  <Input required placeholder="Dr. John Doe" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} className="bg-slate-50 dark:bg-slate-900" />
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Email Address</label>
-                  <Input required type="email" placeholder="doctor@mediso.com" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="bg-slate-50 dark:bg-slate-900" />
+                  <Input required type="email" placeholder="doctor@mediso.com" value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })} className="bg-slate-50 dark:bg-slate-900" />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Phone Number</label>
-                    <Input required placeholder="+1 (555) 001-2233" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="bg-slate-50 dark:bg-slate-900" />
+                    <Input required placeholder="+1 (555) 001-2233" value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })} className="bg-slate-50 dark:bg-slate-900" />
                   </div>
                   <div>
                     <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Experience</label>
-                    <Input required placeholder="e.g. 10 years" value={formData.experience} onChange={e => setFormData({...formData, experience: e.target.value})} className="bg-slate-50 dark:bg-slate-900" />
+                    <Input required placeholder="e.g. 10 years" value={formData.experience} onChange={e => setFormData({ ...formData, experience: e.target.value })} className="bg-slate-50 dark:bg-slate-900" />
                   </div>
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Specialization</label>
-                  <select required value={formData.specialization} onChange={e => setFormData({...formData, specialization: e.target.value})} className="w-full h-10 px-3 py-2 rounded-md border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                  <select required value={formData.specialization} onChange={e => setFormData({ ...formData, specialization: e.target.value })} className="w-full h-10 px-3 py-2 rounded-md border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
                     <option value="">Select Specialty</option>
                     <option value="Cardiology">Cardiology</option>
                     <option value="Neurology">Neurology</option>
@@ -290,7 +318,7 @@ export default function AdminDoctorsPage() {
                   </select>
                 </div>
               </div>
-              
+
               <div className="pt-2">
                 <Button type="submit" className="w-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-500/20 py-5">
                   {editingDoc ? 'Save Changes' : 'Confirm & Add Doctor'}

@@ -33,6 +33,8 @@ model Patient {
   name      String
   email     String   @unique
   phone     String
+  status    String   @default("active")
+  condition String   @default("Not specified")
   createdAt DateTime @default(now())
 }
 

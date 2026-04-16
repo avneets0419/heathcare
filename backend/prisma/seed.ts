@@ -1,10 +1,6 @@
-import { PrismaClient } from "@prisma/client";
-import { PrismaPg } from "@prisma/adapter-pg";
-import pg from "pg";
+import "dotenv/config"; // ✅ loads .env file
 
-const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
-const adapter = new PrismaPg(pool);
-const prisma = new PrismaClient({ adapter });
+import { prisma } from "../src/lib/prisma"; // ✅ reuse same client
 
 async function main() {
   // Clean existing data
@@ -73,6 +69,8 @@ async function main() {
         name: "John Carter",
         email: "john.carter@email.com",
         phone: "+1 (555) 201-0001",
+        status: "active",                 // ✅ added
+        condition: "Cardiology",          // ✅ added
       },
     }),
     prisma.patient.create({
@@ -80,6 +78,8 @@ async function main() {
         name: "Maria Lopez",
         email: "maria.lopez@email.com",
         phone: "+1 (555) 201-0002",
+        status: "under_treatment",        // ✅ added
+        condition: "Dental",              // ✅ added
       },
     }),
     prisma.patient.create({
@@ -87,6 +87,8 @@ async function main() {
         name: "David Chen",
         email: "david.chen@email.com",
         phone: "+1 (555) 201-0003",
+        status: "recovered",              // ✅ added
+        condition: "Orthopedic",          // ✅ added
       },
     }),
     prisma.patient.create({
@@ -94,6 +96,8 @@ async function main() {
         name: "Aisha Rahman",
         email: "aisha.rahman@email.com",
         phone: "+1 (555) 201-0004",
+        status: "active",                 // ✅ added
+        condition: "Neurology",           // ✅ added
       },
     }),
     prisma.patient.create({
@@ -101,6 +105,8 @@ async function main() {
         name: "Tom Williams",
         email: "tom.williams@email.com",
         phone: "+1 (555) 201-0005",
+        status: "inactive",               // ✅ added
+        condition: "General Checkup",     // ✅ added
       },
     }),
   ]);

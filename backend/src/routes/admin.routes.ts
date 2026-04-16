@@ -3,7 +3,7 @@ import { getAllDoctors, createDoctor, updateDoctor, deleteDoctor } from "../cont
 import { getDashboardStats, getTrafficData } from "../controllers/adminDashbaord.controller";
 import { authMiddleware } from "../middleware/auth.middleware";
 import { roleMiddleware } from "../middleware/role.middleware";
-
+import { getPatients, createPatient, updatePatient, deletePatient } from "../controllers/adminpatient.controller";
 const router = Router();
 
 // ✅ PROTECT ALL ADMIN ROUTES
@@ -16,4 +16,8 @@ router.post("/doctors", createDoctor);
 router.put("/doctors/:id", updateDoctor);
 router.delete("/doctors/:id", deleteDoctor);
 
+router.get("/patients", getPatients);
+router.post("/patients", createPatient);
+router.put("/patients/:id", updatePatient);
+router.delete("/patients/:id", deletePatient);
 export const adminRouter = router;

@@ -32,6 +32,8 @@ CREATE TABLE "Patient" (
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "phone" TEXT NOT NULL,
+    "status" TEXT NOT NULL DEFAULT 'active',
+    "condition" TEXT NOT NULL DEFAULT 'Not specified',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Patient_pkey" PRIMARY KEY ("id")
