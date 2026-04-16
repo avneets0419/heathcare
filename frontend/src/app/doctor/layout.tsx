@@ -1,30 +1,20 @@
 "use client";
 
 import { DashboardLayout } from "@/components/layout/dashboard-layout";
-import { useEffect, useState } from "react";
+import AuthGuard from "@/components/shared/AuthGuard";
 
 export default function DoctorLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [userName, setUserName] = useState("Doctor");
-
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem("user");
-      if (raw) {
-        const user = JSON.parse(raw) as { name?: string };
-        if (user.name) setUserName(user.name);
-      }
-    } catch {
-      // silently keep default
-    }
-  }, []);
+  const userName = "Doctor";
 
   return (
-    <DashboardLayout role="doctor" userName={userName}>
-      {children}
-    </DashboardLayout>
+    <AuthGuard allowedRoles={["doctor"]}>
+      <DashboardLayout role="doctor" userName={userName}>
+        {children}
+      </DashboardLayout>
+    </AuthGuard>
   );
 }

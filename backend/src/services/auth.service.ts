@@ -1,5 +1,5 @@
 import { findUserByEmail, createUser } from "../models/user.model";
-import { RegisterPayload, LoginPayload } from "../types";
+import { RegisterPayload, LoginPayload, AuthUser } from "../types";
 import bcrypt from "bcryptjs";
 import { generateToken } from "../utils/jwt.util";
 
@@ -41,16 +41,15 @@ export class AuthService {
       throw new Error("Invalid email or password.");
     }
 
-    const tokenPayload = {
+    const tokenPayload: AuthUser = {
       id: user.id,
       email: user.email,
-      role: user.role,
+      role: user.role as "admin" | "doctor" | "patient",
     };
     const token = generateToken(tokenPayload);
 
     return {
       token,
-      user: tokenPayload,
     };
   }
 }

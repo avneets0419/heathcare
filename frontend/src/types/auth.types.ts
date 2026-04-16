@@ -8,6 +8,7 @@ export type LoginResponse = {
     user: {
         id: string;
         name: string;
+        email: string;
         role: "patient" | "doctor" | "admin";
     };
 };

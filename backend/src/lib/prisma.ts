@@ -1,8 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
-import pg from "pg";
-
-const { Pool } = pg;
+import { Pool } from "pg";
 declare global {
   var __prisma: PrismaClient | undefined;
 }

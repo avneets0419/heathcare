@@ -15,6 +15,7 @@ import {
   Activity,
   Loader2,
 } from "lucide-react";
+import AuthGuard from "@/components/shared/AuthGuard";
 
 // ── Skeleton ──────────────────────────────────────────────────────────────────
 function SkeletonCard() {
@@ -99,7 +100,8 @@ export default function DoctorDashboardPage() {
 
 
   return (
-    <div className="space-y-8">
+    <AuthGuard allowedRoles={["doctor"]}>
+      <div className="space-y-8">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center gap-3 justify-between">
         <div>
@@ -229,5 +231,6 @@ export default function DoctorDashboardPage() {
         </section>
       )}
     </div>
+    </AuthGuard>
   );
 }

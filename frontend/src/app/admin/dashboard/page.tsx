@@ -5,6 +5,7 @@ import { Users, DollarSign, AlertTriangle, TrendingUp, UserPlus, Clock, MoreVert
 import { Button } from "@/components/ui/button";
 import { adminDashboardService, DashboardStats } from "@/services/adminDashboard.service";
 import { useEffect, useState } from "react";
+import AuthGuard from "@/components/shared/AuthGuard";
 import { stat } from "fs";
 
 
@@ -45,7 +46,8 @@ export default function AdminDashboardPage() {
 
 
   return (
-    <div className="space-y-8 animate-in fade-in zoom-in-95 duration-700 max-w-[1600px] mx-auto pb-12">
+    <AuthGuard allowedRoles={["admin"]}>
+      <div className="space-y-8 animate-in fade-in zoom-in-95 duration-700 max-w-[1600px] mx-auto pb-12">
 
       {/* 1. Header & Actions */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6">
@@ -285,12 +287,12 @@ export default function AdminDashboardPage() {
             {stats.upcomingAppointments.map((patient) => (
               <div key={patient.id} className="relative group cursor-pointer z-10">
                 {/* Timeline node */}
-                <div className={`absolute -left-8 top-1.5 w-3.5 h-3.5 rounded-full border-2 bg-white  'border-slate-300 group-hover:border-emerald-400 transition-colors'}`} />
+                <div className="absolute -left-8 top-1.5 w-3.5 h-3.5 rounded-full border-2 bg-white border-slate-300 group-hover:border-emerald-400 transition-colors" />
 
-                <div className={`flex flex-col p-4 rounded-2xl border transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-1  'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-slate-300'}`}>
+                <div className="flex flex-col p-4 rounded-2xl border transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-1 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-slate-300">
                   <div className="flex justify-between items-start">
                     <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm shadow-sm border  'bg-slate-50 text-slate-700 border-slate-200 group-hover:bg-slate-100 group-hover:text-emerald-700'}`}>
+                      <div className="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm shadow-sm border bg-slate-50 text-slate-700 border-slate-200 group-hover:bg-slate-100 group-hover:text-emerald-700">
                         {patient.patientName.charAt(0)}
                       </div>
                       <div>
@@ -324,9 +326,9 @@ export default function AdminDashboardPage() {
         </div>
 
       </div>
-
     </div>
-  );
+  </AuthGuard>
+);
 }
 
 

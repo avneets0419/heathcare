@@ -28,7 +28,8 @@ export const getDashboardStats = async (req: Request, res: Response) => {
       activeDoctors,
       upcomingAppointments,
     });
-  } catch {
+  } catch (error) {
+    console.error("Dashboard Stats Error:", error);
     res.status(500).json({ message: "Failed to fetch dashboard stats" });
   }
 };
@@ -42,15 +43,23 @@ export const getTrafficData = async (req: Request, res: Response) => {
     const counts = Array(7).fill(0);
 
     appointments.forEach((a) => {
-      const day = new Date(a.time).getDay(); // parse the time string
-      if (!isNaN(day)) counts[day]++;
+      if (!a.time) return;
+
+      // ✅ safest parsing approach
+      const parsedDate = new Date(Date.parse(a.time));
+
+      if (!isNaN(parsedDate.getTime())) {
+        const day = parsedDate.getDay();
+        counts[day]++;
+      }
     });
 
-    // Reorder Sun-Sat → Mon-Sun
+    // Sun-Sat → Mon-Sun
     const monToSun = [...counts.slice(1), counts[0]];
 
     res.status(200).json(monToSun);
-  } catch {
+  } catch (error) {
+    console.error("Traffic Data Error:", error);
     res.status(500).json({ message: "Failed to fetch traffic data" });
   }
 };

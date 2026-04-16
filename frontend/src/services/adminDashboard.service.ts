@@ -1,9 +1,4 @@
-import axios from 'axios';
-
-const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL ? `${process.env.NEXT_PUBLIC_API_URL}/admin` : 'http://localhost:5001/api/admin',
-  withCredentials: true
-});
+import { api } from '@/lib/axios';
 
 export interface DashboardStats {
   totalRevenue: number;
@@ -23,11 +18,11 @@ export interface DashboardStats {
 
 export const adminDashboardService = {
   getStats: async (): Promise<DashboardStats> => {
-    const { data } = await api.get('/dashboard');
+    const { data } = await api.get('/admin/dashboard');
     return data;
   },
   getTraffic: async (): Promise<number[]> => {
-  const { data } = await api.get('/traffic');
+  const { data } = await api.get('/admin/traffic');
   return data;
 }
 };
