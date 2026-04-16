@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
-import { api } from "@/lib/axios";
+import api from "@/lib/axios";
 import { LoginResponse } from "@/types/auth.types";
 import { decodeToken } from "@/lib/decodeToken";
 import { Input } from "@/components/ui/input";
@@ -78,7 +78,7 @@ export default function LoginPage() {
       <div className="relative w-full max-w-md">
         {/* Card */}
         <div className="rounded-3xl border border-white/60 dark:border-slate-700/60 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-2xl shadow-teal-900/10 dark:shadow-teal-400/5 p-8">
-          
+
           {/* Logo */}
           <div className="flex flex-col items-center gap-2 mb-8">
             <div className="flex items-center justify-center h-14 w-14 rounded-2xl bg-teal-600 shadow-lg shadow-teal-600/30">
@@ -94,7 +94,7 @@ export default function LoginPage() {
 
           {/* Form */}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-            
+
             {/* Email */}
             <div className="space-y-1.5">
               <Label
