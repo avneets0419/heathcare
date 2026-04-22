@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
 
 // Example static links. We can pass different lists based on roles (Patient, Doctor, Admin)
 const items = {
@@ -64,32 +63,18 @@ export function AppSidebar({ role }: { role: "admin" | "doctor" | "patient" }) {
                 const isActive = pathname.startsWith(item.url);
                 return (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton 
-                      isActive={isActive} 
-                      tooltip={item.title}
-                      render={
-                        <Link 
-                          href={item.url} 
-                          className={cn(
-                            "flex items-center gap-3 w-full px-3 py-2.5 rounded-xl transition-all duration-200 group",
-                            isActive 
-                              ? "bg-emerald-50 text-emerald-800 font-bold dark:bg-emerald-900/40 dark:text-emerald-300" 
-                              : "text-slate-500 font-semibold hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800/50 dark:hover:text-slate-200"
-                          )}
-                        >
-                          <div className={cn(
-                            "flex items-center justify-center transition-colors",
-                            isActive ? "text-emerald-600 dark:text-emerald-400" : "text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300"
-                          )}>
-                            <item.icon className="h-4 w-4" />
-                          </div>
-                          <span>{item.title}</span>
-                          {isActive && (
-                            <div className="ml-auto w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                          )}
-                        </Link>
-                      }
-                    />
+                    {/* @ts-expect-error - Shadcn UI SidebarMenuButton uses Slot internally but types don't expose it correctly here */}
+                    <SidebarMenuButton asChild isActive={isActive} tooltip={item.title}>
+                      <Link href={item.url} className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-xl transition-all duration-200 group ${isActive ? "bg-emerald-50 text-emerald-800 font-bold dark:bg-emerald-900/40 dark:text-emerald-300" : "text-slate-500 font-semibold hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800/50 dark:hover:text-slate-200"}`}>
+                        <div className={`flex items-center justify-center transition-colors ${isActive ? "text-emerald-600 dark:text-emerald-400" : "text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300"}`}>
+                          <item.icon className="h-4 w-4" />
+                        </div>
+                        <span>{item.title}</span>
+                        {isActive && (
+                          <div className="ml-auto w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                        )}
+                      </Link>
+                    </SidebarMenuButton>
                   </SidebarMenuItem>
                 );
               })}

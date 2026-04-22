@@ -32,13 +32,6 @@ import { completeAppointment } from "@/services/appointment.service";
 
 type FilterStatus = "all" | "pending" | "confirmed" | "completed" | "cancelled";
 
-const STATUS_ORDER: Record<string, number> = {
-  pending: 0,
-  confirmed: 1,
-  completed: 2,
-  cancelled: 3,
-};
-
 const MOCK_APPOINTMENTS: Appointment[] = [
   {
     id: "1",
@@ -104,14 +97,6 @@ export default function DoctorAppointmentsPage() {
     patientName: string;
   }>({ open: false, appointmentId: "", patientName: "" });
 
-  const [sortBy, setSortBy] = useState<"time" | "status">("time");
-  const [detailsModal, setDetailsModal] = useState<{
-    open: boolean;
-    appointment: Appointment | null;
-  }>({ open: false, appointment: null });
-
-  const [completing, setCompleting] = useState<string | null>(null);
-
   const fetchAppointments = useCallback(async () => {
     setLoading(true);
     try {
@@ -167,22 +152,14 @@ export default function DoctorAppointmentsPage() {
     setRxDialog({ open: true, appointmentId, patientName });
   };
 
-  const filteredAndSorted = appointments
-    .filter((a) => {
-      const matchesSearch = a.patientName
-        .toLowerCase()
-        .includes(search.toLowerCase());
-      const matchesFilter =
-        activeFilter === "all" || a.status === activeFilter;
-      return matchesSearch && matchesFilter;
-    })
-    .sort((a, b) => {
-      if (sortBy === "time") {
-        return new Date(a.timeSlot).getTime() - new Date(b.timeSlot).getTime();
-      } else {
-        return STATUS_ORDER[a.status] - STATUS_ORDER[b.status];
-      }
-    });
+  const filtered = appointments.filter((a) => {
+    const matchesSearch = a.patientName
+      .toLowerCase()
+      .includes(search.toLowerCase());
+    const matchesFilter =
+      activeFilter === "all" || a.status === activeFilter;
+    return matchesSearch && matchesFilter;
+  });
 
   const filters: { label: string; value: FilterStatus }[] = [
     { label: "All", value: "all" },
@@ -192,25 +169,16 @@ export default function DoctorAppointmentsPage() {
     { label: "Cancelled", value: "cancelled" },
   ];
 
-  const statusStyles: Record<FilterStatus, string> = {
-    all: "",
-    pending: "bg-amber-100/50 text-amber-700 dark:bg-amber-900/20 dark:text-amber-400 border-amber-200/50",
-    confirmed: "bg-blue-100/50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400 border-blue-200/50",
-    completed: "bg-emerald-100/50 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-400 border-emerald-200/50",
-    cancelled: "bg-rose-100/50 text-rose-700 dark:bg-rose-900/20 dark:text-rose-400 border-rose-200/50",
-  };
-
   return (
-    <div className="space-y-8 animate-in fade-in duration-500 max-w-[1400px] mx-auto pb-12">
-      {/* 1. Header Section */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <div className="relative">
-          <div className="absolute -left-4 -top-4 w-16 h-16 bg-blue-400/10 rounded-full blur-2xl pointer-events-none" />
-          <h1 className="text-4xl font-black tracking-tight text-slate-900 dark:text-white relative z-10">
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center gap-3 justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100 tracking-tight">
             Appointments
           </h1>
-          <p className="text-sm font-semibold text-slate-500 dark:text-slate-400 mt-1 uppercase tracking-widest relative z-10">
-            Manage your daily workflow
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
+            Manage your patient appointments
           </p>
         </div>
 
@@ -256,159 +224,55 @@ export default function DoctorAppointmentsPage() {
         ))}
       </div>
 
-      {/* 3. Appointment List */}
-      <div className="space-y-4 pt-2">
-        {loading ? (
-          <div className="flex flex-col items-center justify-center py-24 text-slate-400">
-            <Loader2 className="h-10 w-10 animate-spin mb-4 text-blue-500" />
-            <p className="text-sm font-bold uppercase tracking-widest">Gathering records...</p>
-          </div>
-        ) : filteredAndSorted.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-24 rounded-3xl border-2 border-dashed border-slate-200 dark:border-slate-800">
-            <CalendarDays className="h-16 w-16 text-slate-200 dark:text-slate-800 mb-4" />
-            <p className="text-slate-500 dark:text-slate-400 font-black uppercase tracking-widest">No appointments found</p>
-          </div>
-        ) : (
-          filteredAndSorted.map((appt) => (
-            <div
-              key={appt.id}
-              onClick={() => setDetailsModal({ open: true, appointment: appt })}
-              className="group bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer hover:border-blue-400/30 backdrop-blur-sm relative overflow-hidden"
+      {/* Search + Filters */}
+      <div className="flex flex-col sm:flex-row gap-3">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+          <Input
+            id="appt-search"
+            placeholder="Search by patient name…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="pl-9 rounded-xl border-slate-200 dark:border-slate-700"
+          />
+        </div>
+        <div className="flex gap-2 flex-wrap">
+          {filters.map((f) => (
+            <button
+              key={f.value}
+              onClick={() => setActiveFilter(f.value)}
+              className={`rounded-xl px-3 py-1.5 text-xs font-semibold border transition-colors ${
+                activeFilter === f.value
+                  ? "bg-teal-600 text-white border-teal-600"
+                  : "border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
+              }`}
             >
-              <div className="flex items-center gap-6 flex-1 min-w-0">
-                <div className="w-16 h-16 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 flex items-center justify-center font-black text-xl text-slate-400 group-hover:bg-blue-50 group-hover:text-blue-500 group-hover:border-blue-100 dark:group-hover:bg-blue-900/20 transition-colors shrink-0">
-                  {appt.patientName.charAt(0)}
-                </div>
-                <div className="min-w-0">
-                  <h3 className="text-xl font-black text-slate-900 dark:text-white truncate tracking-tight mb-1 uppercase">
-                    {appt.patientName}
-                  </h3>
-                  <div className="flex flex-wrap items-center gap-4">
-                    <div className="flex items-center gap-1.5 text-slate-400 dark:text-slate-500">
-                      <CalendarDays className="h-4 w-4" />
-                      <span className="text-xs font-bold uppercase tracking-wider">
-                        {new Date(appt.timeSlot).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric'})}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1.5 text-slate-400 dark:text-slate-500">
-                      <Clock className="h-4 w-4" />
-                      <span className="text-xs font-bold uppercase tracking-wider">
-                        {new Date(appt.timeSlot).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true}).toUpperCase()}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex-1 flex justify-center shrink-0">
-                <Badge 
-                  variant="outline" 
-                  className={`border-0 px-4 py-1 rounded-full font-black text-[10px] uppercase tracking-widest ${statusStyles[appt.status]}`}
-                >
-                  {appt.status}
-                </Badge>
-              </div>
-
-              <div className="flex items-center gap-3 shrink-0" onClick={(e) => e.stopPropagation()}>
-                <Button 
-                  variant="ghost" 
-                  className="h-10 px-4 rounded-xl font-black text-[10px] uppercase tracking-widest text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800"
-                  onClick={() => setDetailsModal({ open: true, appointment: appt })}
-                >
-                  View Details
-                </Button>
-                {appt.status !== 'completed' && appt.status !== 'cancelled' && (
-                  <Button 
-                    className="h-10 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-[10px] uppercase tracking-widest shadow-lg shadow-emerald-600/20 transition-all active:scale-95"
-                    disabled={completing === appt.id}
-                    onClick={() => handleComplete(appt.id)}
-                  >
-                    {completing === appt.id ? <Loader2 className="h-3 w-3 animate-spin mr-2" /> : <CheckCircle2 className="h-3 w-3 mr-2" />}
-                    Mark Completed
-                  </Button>
-                )}
-              </div>
-            </div>
-          ))
-        )}
+              {f.label}
+            </button>
+          ))}
+        </div>
       </div>
 
-      {/* 4. Details Modal */}
-      <Dialog
-  open={detailsModal.open}
-  onOpenChange={(open) => setDetailsModal((s) => ({ ...s, open }))}
->
-  <DialogContent
-    showCloseButton={false}
-    className="max-w-5xl w-full rounded-[28px] p-0 overflow-hidden border border-slate-200 bg-white shadow-2xl max-h-[90vh] flex flex-col"
-  >
-    {detailsModal.appointment && (
-      <>
-        {/* 🔹 HEADER */}
-        <div className="relative px-8 py-6 bg-gradient-to-r from-blue-50 via-white to-indigo-50 border-b border-slate-200">
-          {/* Close */}
-          <DialogClose className="absolute top-5 right-5 p-2 rounded-full hover:bg-slate-100 transition">
-            <XIcon className="h-5 w-5 text-slate-500" />
-          </DialogClose>
+      {/* Count */}
+      <p className="text-xs text-slate-400 dark:text-slate-500">
+        Showing <strong className="text-slate-600 dark:text-slate-300">{filtered.length}</strong> appointments
+      </p>
 
-          {/* Status */}
-          <Badge className={`mb-3 px-3 py-1 rounded-full text-[10px] font-semibold uppercase tracking-widest ${statusStyles[detailsModal.appointment.status]}`}>
-            {detailsModal.appointment.status}
-          </Badge>
-
-          {/* Patient */}
-          <h2 className="text-3xl font-extrabold text-slate-900">
-            {detailsModal.appointment.patientName}
-          </h2>
-
-          <p className="text-xs text-slate-500 mt-1 uppercase tracking-widest">
-            Appointment ID: #{detailsModal.appointment.id}
-          </p>
+      {/* Appointment grid */}
+      {loading ? (
+        <div className="flex flex-col items-center justify-center py-20 text-slate-400">
+          <Loader2 className="h-8 w-8 animate-spin mb-3 text-teal-500" />
+          <p className="text-sm">Loading appointments…</p>
         </div>
-
-        {/* 🔹 BODY */}
-        <div className="flex-1 overflow-y-auto p-8 space-y-8">
-
-          {/* INFO GRID */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-
-            <div className="p-5 rounded-2xl bg-gradient-to-br from-white to-slate-50 border border-slate-200 shadow-sm hover:shadow-md transition">
-              <p className="text-xs text-slate-400 uppercase mb-1">Date</p>
-              <p className="font-semibold text-slate-900">
-                {new Date(detailsModal.appointment.timeSlot).toLocaleDateString()}
-              </p>
-            </div>
-
-            <div className="p-5 rounded-2xl bg-gradient-to-br from-white to-slate-50 border border-slate-200 shadow-sm hover:shadow-md transition">
-              <p className="text-xs text-slate-400 uppercase mb-1">Time</p>
-              <p className="font-semibold text-slate-900">
-                {new Date(detailsModal.appointment.timeSlot).toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
-              </p>
-            </div>
-
-            <div className="p-5 rounded-2xl bg-gradient-to-br from-white to-slate-50 border border-slate-200 shadow-sm hover:shadow-md transition">
-              <p className="text-xs text-slate-400 uppercase mb-1">Patient ID</p>
-              <p className="font-semibold text-slate-900">
-                {detailsModal.appointment.patientId}
-              </p>
-            </div>
-
-          </div>
-
-          {/* CLINICAL NOTES */}
-          <div>
-            <p className="text-xs font-semibold text-slate-400 uppercase mb-2 tracking-widest">
-              Clinical Notes
+      ) : filtered.length === 0 ? (
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200 dark:border-slate-700 py-20 text-slate-400">
+          <CalendarDays className="h-12 w-12 mb-3 opacity-30" />
+          <p className="text-sm font-medium">No appointments found</p>
+          {search && (
+            <p className="text-xs mt-1 opacity-70">
+              Try clearing your search filter
             </p>
-
-            <div className="p-6 rounded-2xl bg-gradient-to-br from-slate-50 to-white border border-slate-200 text-sm text-slate-700 leading-relaxed shadow-sm">
-              {detailsModal.appointment.notes || "No notes available."}
-            </div>
-          </div>
-
+          )}
         </div>
 
         {/* 🔹 FOOTER (FIXED BUTTONS) */}
@@ -457,41 +321,30 @@ export default function DoctorAppointmentsPage() {
 
           </div>
         </div>
-      </>
-    )}
-  </DialogContent>
-</Dialog>
+      )}
 
-      {/* 5. Prescription Dialog (Existing) */}
+      {/* Prescription Dialog */}
       <Dialog
         open={rxDialog.open}
         onOpenChange={(open) => setRxDialog((s) => ({ ...s, open }))}
       >
-        <DialogContent 
-          showCloseButton={false}
-          className="max-w-6xl rounded-[32px] p-0 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-2xl max-h-[90vh] overflow-y-auto no-scrollbar"
-        >
-          <div className="bg-gradient-to-br from-slate-50 to-white dark:from-slate-900 dark:to-slate-950 p-8 md:p-10 border-b border-slate-100 dark:border-slate-800 relative z-10">
-            <DialogClose className="absolute top-6 right-6 md:top-8 md:right-8 text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors z-[100] p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full">
-              <XIcon className="h-6 w-6 md:h-7 md:h-7" />
-            </DialogClose>
-            <h2 className="text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight relative z-10">Write Prescription</h2>
-            <p className="text-slate-500 font-bold uppercase tracking-[0.2em] text-[10px] mt-2">Patient: {rxDialog.patientName}</p>
-          </div>
-          <div className="p-8">
-            <PrescriptionForm
-              appointmentId={rxDialog.appointmentId}
-              patientName={rxDialog.patientName}
-              onSuccess={() => {
-                setRxDialog({ open: false, appointmentId: "", patientName: "" });
-                setDetailsModal({ open: false, appointment: null });
-                fetchAppointments();
-              }}
-              onCancel={() =>
-                setRxDialog({ open: false, appointmentId: "", patientName: "" })
-              }
-            />
-          </div>
+        <DialogContent className="max-w-2xl rounded-2xl">
+          <DialogHeader>
+            <DialogTitle className="text-slate-800 dark:text-slate-100">
+              Write Prescription
+            </DialogTitle>
+          </DialogHeader>
+          <PrescriptionForm
+            appointmentId={rxDialog.appointmentId}
+            patientName={rxDialog.patientName}
+            onSuccess={() => {
+              setRxDialog({ open: false, appointmentId: "", patientName: "" });
+              fetchAppointments();
+            }}
+            onCancel={() =>
+              setRxDialog({ open: false, appointmentId: "", patientName: "" })
+            }
+          />
         </DialogContent>
       </Dialog>
     </div>
