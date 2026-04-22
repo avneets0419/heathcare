@@ -1,12 +1,11 @@
 "use client"
 
-import { Users, DollarSign, AlertTriangle, TrendingUp, UserPlus, Clock, MoreVertical } from "lucide-react";
+import { Users, DollarSign, AlertTriangle, TrendingUp, UserPlus, MoreVertical } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { adminDashboardService, DashboardStats } from "@/services/adminDashboard.service";
 import { useEffect, useState } from "react";
 import AuthGuard from "@/components/shared/AuthGuard";
-import { stat } from "fs";
 
 
 
@@ -39,10 +38,8 @@ export default function AdminDashboardPage() {
   if (error) return <div className="p-6 text-red-500">{error}</div>;
   if (!stats) return null;
 
-  const max = Math.max(...traffic);
-  const avg = Math.round(traffic.reduce((a, b) => a + b, 0) / traffic.length);
+  const max = Math.max(...traffic, 1);
   const normalize = (val: number) => max === 0 ? 0 : Math.round((val / max) * 100);
-  const avgPct = normalize(avg);
 
 
   return (

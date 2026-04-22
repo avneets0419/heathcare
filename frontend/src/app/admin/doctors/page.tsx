@@ -1,13 +1,12 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Plus, Search, Filter, Mail, Phone, Users, UserCheck, UserX, Eye, Edit, Trash2, X } from "lucide-react"
+import { Plus, Search, Filter, Mail, Phone, Users, UserCheck, UserX, Edit, Trash2, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { StatCard } from "@/components/shared/StatCard"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { adminService } from "@/services/admin.service"
 import api from "@/lib/axios"
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 
 export interface Doctor {
   id: string;
@@ -81,7 +80,7 @@ export default function AdminDoctorsPage() {
       });
 
       fetchDoctors();
-    } catch (e) {
+    } catch {
       alert('Error deleting doctor');
     }
   };
@@ -120,7 +119,7 @@ export default function AdminDoctorsPage() {
 
       setIsModalOpen(false);
       fetchDoctors();
-    } catch (err) {
+    } catch {
       alert("Error saving doctor");
     }
   };

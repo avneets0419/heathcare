@@ -11,7 +11,7 @@ export interface DecodedToken {
 export const decodeToken = (token: string): DecodedToken | null => {
   try {
     return jwtDecode(token);
-  } catch (error) {
+  } catch {
     return null;
   }
 };
