@@ -11,21 +11,21 @@ import {
   DialogContent,
   DialogClose,
 } from "@/components/ui/dialog";
-import { 
-  Search, 
-  CalendarDays, 
-  Loader2, 
-  Clock, 
-  CheckCircle2, 
+import {
+  Search,
+  CalendarDays,
+  Loader2,
+  Clock,
+  CheckCircle2,
   ArrowUpDown,
   X
 } from "lucide-react";
-import { 
-  Select, 
-  SelectContent, 
-  SelectItem, 
-  SelectTrigger, 
-  SelectValue 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 
@@ -244,11 +244,10 @@ export default function DoctorAppointmentsPage() {
           <button
             key={f.value}
             onClick={() => setActiveFilter(f.value)}
-            className={`px-6 py-2.5 rounded-full text-xs font-black uppercase tracking-widest transition-all duration-300 border ${
-              activeFilter === f.value
-                ? "bg-slate-900 text-white border-slate-900 shadow-lg shadow-slate-900/20 dark:bg-white dark:text-slate-900 dark:border-white"
-                : "bg-white text-slate-500 border-slate-200 hover:border-slate-300 dark:bg-slate-900 dark:text-slate-400 dark:border-slate-800"
-            }`}
+            className={`px-6 py-2.5 rounded-full text-xs font-black uppercase tracking-widest transition-all duration-300 border ${activeFilter === f.value
+              ? "bg-slate-900 text-white border-slate-900 shadow-lg shadow-slate-900/20 dark:bg-white dark:text-slate-900 dark:border-white"
+              : "bg-white text-slate-500 border-slate-200 hover:border-slate-300 dark:bg-slate-900 dark:text-slate-400 dark:border-slate-800"
+              }`}
           >
             {f.label}
           </button>
@@ -286,13 +285,13 @@ export default function DoctorAppointmentsPage() {
                     <div className="flex items-center gap-1.5 text-slate-400 dark:text-slate-500">
                       <CalendarDays className="h-4 w-4" />
                       <span className="text-xs font-bold uppercase tracking-wider">
-                        {new Date(appt.timeSlot).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric'})}
+                        {new Date(appt.timeSlot).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
                       </span>
                     </div>
                     <div className="flex items-center gap-1.5 text-slate-400 dark:text-slate-500">
                       <Clock className="h-4 w-4" />
                       <span className="text-xs font-bold uppercase tracking-wider">
-                        {new Date(appt.timeSlot).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true}).toUpperCase()}
+                        {new Date(appt.timeSlot).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true }).toUpperCase()}
                       </span>
                     </div>
                   </div>
@@ -300,8 +299,8 @@ export default function DoctorAppointmentsPage() {
               </div>
 
               <div className="flex-1 flex justify-center shrink-0">
-                <Badge 
-                  variant="outline" 
+                <Badge
+                  variant="outline"
                   className={`border-0 px-4 py-1 rounded-full font-black text-[10px] uppercase tracking-widest ${statusStyles[appt.status]}`}
                 >
                   {appt.status}
@@ -309,15 +308,15 @@ export default function DoctorAppointmentsPage() {
               </div>
 
               <div className="flex items-center gap-3 shrink-0" onClick={(e) => e.stopPropagation()}>
-                <Button 
-                  variant="ghost" 
+                <Button
+                  variant="ghost"
                   className="h-10 px-4 rounded-xl font-black text-[10px] uppercase tracking-widest text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800"
                   onClick={() => setDetailsModal({ open: true, appointment: appt })}
                 >
                   View Details
                 </Button>
                 {appt.status !== 'completed' && appt.status !== 'cancelled' && (
-                  <Button 
+                  <Button
                     className="h-10 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-[10px] uppercase tracking-widest shadow-lg shadow-emerald-600/20 transition-all active:scale-95"
                     disabled={completing === appt.id}
                     onClick={() => handleComplete(appt.id)}
@@ -334,149 +333,149 @@ export default function DoctorAppointmentsPage() {
 
       {/* 4. Details Modal */}
       <Dialog
-  open={detailsModal.open}
-  onOpenChange={(open) => setDetailsModal((s) => ({ ...s, open }))}
->
-  <DialogContent
-    showCloseButton={false}
-    className="max-w-5xl w-full rounded-[28px] p-0 overflow-hidden border border-slate-200 bg-white shadow-2xl max-h-[90vh] flex flex-col"
-  >
-    {detailsModal.appointment && (
-      <>
-        {/* 🔹 HEADER */}
-        <div className="relative px-8 py-6 bg-gradient-to-r from-blue-50 via-white to-indigo-50 border-b border-slate-200">
-          {/* Close */}
-          <DialogClose className="absolute top-5 right-5 p-2 rounded-full hover:bg-slate-100 transition">
-            <X className="h-5 w-5 text-slate-500" />
-          </DialogClose>
+        open={detailsModal.open}
+        onOpenChange={(open) => setDetailsModal((s) => ({ ...s, open }))}
+      >
+        <DialogContent
+          showCloseButton={false}
+          className="max-w-5xl w-full rounded-[28px] p-0 overflow-hidden border border-slate-200 bg-white shadow-2xl max-h-[90vh] flex flex-col"
+        >
+          {detailsModal.appointment && (
+            <>
+              {/* 🔹 HEADER */}
+              <div className="relative px-8 py-6 bg-gradient-to-r from-blue-50 via-white to-indigo-50 border-b border-slate-200">
+                {/* Close */}
+                <DialogClose className="absolute top-5 right-5 p-2 rounded-full hover:bg-slate-100 transition">
+                  <X className="h-5 w-5 text-slate-500" />
+                </DialogClose>
 
-          {/* Status */}
-          <Badge className={`mb-3 px-3 py-1 rounded-full text-[10px] font-semibold uppercase tracking-widest ${statusStyles[detailsModal.appointment.status]}`}>
-            {detailsModal.appointment.status}
-          </Badge>
+                {/* Status */}
+                <Badge className={`mb-3 px-3 py-1 rounded-full text-[10px] font-semibold uppercase tracking-widest ${statusStyles[detailsModal.appointment.status]}`}>
+                  {detailsModal.appointment.status}
+                </Badge>
 
-          {/* Patient */}
-          <h2 className="text-3xl font-extrabold text-slate-900">
-            {detailsModal.appointment.patientName}
-          </h2>
+                {/* Patient */}
+                <h2 className="text-3xl font-extrabold text-slate-900">
+                  {detailsModal.appointment.patientName}
+                </h2>
 
-          <p className="text-xs text-slate-500 mt-1 uppercase tracking-widest">
-            Appointment ID: #{detailsModal.appointment.id}
-          </p>
-        </div>
+                <p className="text-xs text-slate-500 mt-1 uppercase tracking-widest">
+                  Appointment ID: #{detailsModal.appointment.id}
+                </p>
+              </div>
 
-        {/* 🔹 BODY */}
-        <div className="flex-1 overflow-y-auto p-8 space-y-8">
+              {/* 🔹 BODY */}
+              <div className="flex-1 overflow-y-auto p-8 space-y-8">
 
-          {/* INFO GRID */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {/* INFO GRID */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
 
-            <div className="p-5 rounded-2xl bg-gradient-to-br from-white to-slate-50 border border-slate-200 shadow-sm hover:shadow-md transition">
-              <p className="text-xs text-slate-400 uppercase mb-1">Date</p>
-              <p className="font-semibold text-slate-900">
-                {new Date(detailsModal.appointment.timeSlot).toLocaleDateString()}
-              </p>
-            </div>
+                  <div className="p-5 rounded-2xl bg-gradient-to-br from-white to-slate-50 border border-slate-200 shadow-sm hover:shadow-md transition">
+                    <p className="text-xs text-slate-400 uppercase mb-1">Date</p>
+                    <p className="font-semibold text-slate-900">
+                      {new Date(detailsModal.appointment.timeSlot).toLocaleDateString()}
+                    </p>
+                  </div>
 
-            <div className="p-5 rounded-2xl bg-gradient-to-br from-white to-slate-50 border border-slate-200 shadow-sm hover:shadow-md transition">
-              <p className="text-xs text-slate-400 uppercase mb-1">Time</p>
-              <p className="font-semibold text-slate-900">
-                {new Date(detailsModal.appointment.timeSlot).toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
-              </p>
-            </div>
+                  <div className="p-5 rounded-2xl bg-gradient-to-br from-white to-slate-50 border border-slate-200 shadow-sm hover:shadow-md transition">
+                    <p className="text-xs text-slate-400 uppercase mb-1">Time</p>
+                    <p className="font-semibold text-slate-900">
+                      {new Date(detailsModal.appointment.timeSlot).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </p>
+                  </div>
 
-            <div className="p-5 rounded-2xl bg-gradient-to-br from-white to-slate-50 border border-slate-200 shadow-sm hover:shadow-md transition">
-              <p className="text-xs text-slate-400 uppercase mb-1">Patient ID</p>
-              <p className="font-semibold text-slate-900">
-                {detailsModal.appointment.patientId}
-              </p>
-            </div>
+                  <div className="p-5 rounded-2xl bg-gradient-to-br from-white to-slate-50 border border-slate-200 shadow-sm hover:shadow-md transition">
+                    <p className="text-xs text-slate-400 uppercase mb-1">Patient ID</p>
+                    <p className="font-semibold text-slate-900">
+                      {detailsModal.appointment.patientId}
+                    </p>
+                  </div>
 
-          </div>
+                </div>
 
-          {/* CLINICAL NOTES */}
-          <div>
-            <p className="text-xs font-semibold text-slate-400 uppercase mb-2 tracking-widest">
-              Clinical Notes
-            </p>
+                {/* CLINICAL NOTES */}
+                <div>
+                  <p className="text-xs font-semibold text-slate-400 uppercase mb-2 tracking-widest">
+                    Clinical Notes
+                  </p>
 
-            <div className="p-6 rounded-2xl bg-gradient-to-br from-slate-50 to-white border border-slate-200 text-sm text-slate-700 leading-relaxed shadow-sm">
-              {detailsModal.appointment.notes || "No notes available."}
-            </div>
-          </div>
+                  <div className="p-6 rounded-2xl bg-gradient-to-br from-slate-50 to-white border border-slate-200 text-sm text-slate-700 leading-relaxed shadow-sm">
+                    {detailsModal.appointment.notes || "No notes available."}
+                  </div>
+                </div>
 
-        </div>
+              </div>
 
-        {/* 🔹 FOOTER (FIXED BUTTONS) */}
-        <div className="p-6 border-t border-slate-200 bg-white">
-          <div className="flex flex-wrap gap-3">
+              {/* 🔹 FOOTER (FIXED BUTTONS) */}
+              <div className="p-6 border-t border-slate-200 bg-white">
+                <div className="flex flex-wrap gap-3">
 
-            {/* Write Prescription */}
-            {detailsModal.appointment.status && ["confirmed", "pending"].includes(detailsModal.appointment.status.toLowerCase()) && (
-              <Button
-                className="flex-1 min-w-[150px] h-11 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-sm transition"
-                onClick={() => {
-                  if (detailsModal.appointment) {
-                    handlePrescribe(
-                      detailsModal.appointment.id,
-                      detailsModal.appointment.patientName
-                    )
-                  }
-                }}
-              >
-                Write Prescription
-              </Button>
-            )}
+                  {/* Write Prescription */}
+                  {detailsModal.appointment.status && ["confirmed", "pending"].includes(detailsModal.appointment.status.toLowerCase()) && (
+                    <Button
+                      className="flex-1 min-w-[150px] h-11 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-sm transition"
+                      onClick={() => {
+                        if (detailsModal.appointment) {
+                          handlePrescribe(
+                            detailsModal.appointment.id,
+                            detailsModal.appointment.patientName
+                          )
+                        }
+                      }}
+                    >
+                      Write Prescription
+                    </Button>
+                  )}
 
-            {/* Mark Completed */}
-            {detailsModal.appointment.status && !["completed", "cancelled"].includes(detailsModal.appointment.status.toLowerCase()) && (
-              <Button
-                className="flex-1 min-w-[150px] h-11 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold shadow-sm transition"
-                onClick={() => {
-                  if (detailsModal.appointment) {
-                    handleComplete(detailsModal.appointment.id)
-                  }
-                }}
-              >
-                Mark Completed
-              </Button>
-            )}
+                  {/* Mark Completed */}
+                  {detailsModal.appointment.status && !["completed", "cancelled"].includes(detailsModal.appointment.status.toLowerCase()) && (
+                    <Button
+                      className="flex-1 min-w-[150px] h-11 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold shadow-sm transition"
+                      onClick={() => {
+                        if (detailsModal.appointment) {
+                          handleComplete(detailsModal.appointment.id)
+                        }
+                      }}
+                    >
+                      Mark Completed
+                    </Button>
+                  )}
 
-            {/* Cancel */}
-            {!["cancelled"].includes(detailsModal.appointment.status.toLowerCase()) && (
-              <Button
-                variant="outline"
-                className="flex-1 min-w-[150px] h-11 rounded-xl border border-red-200 text-red-500 hover:bg-red-50 transition"
-                onClick={() => {
-                  if (detailsModal.appointment) {
-                    handleCancel(detailsModal.appointment.id)
-                  }
-                }}
-                disabled={cancelling === detailsModal.appointment.id}
-              >
-                {cancelling === detailsModal.appointment.id ? (
-                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                ) : null}
-                Cancel
-              </Button>
-            )}
+                  {/* Cancel */}
+                  {!["cancelled"].includes(detailsModal.appointment.status.toLowerCase()) && (
+                    <Button
+                      variant="outline"
+                      className="flex-1 min-w-[150px] h-11 rounded-xl border border-red-200 text-red-500 hover:bg-red-50 transition"
+                      onClick={() => {
+                        if (detailsModal.appointment) {
+                          handleCancel(detailsModal.appointment.id)
+                        }
+                      }}
+                      disabled={cancelling === detailsModal.appointment.id}
+                    >
+                      {cancelling === detailsModal.appointment.id ? (
+                        <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                      ) : null}
+                      Cancel
+                    </Button>
+                  )}
 
-          </div>
-        </div>
-      </>
-    )}
-  </DialogContent>
-</Dialog>
+                </div>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
 
       {/* 5. Prescription Dialog (Existing) */}
       <Dialog
         open={rxDialog.open}
         onOpenChange={(open) => setRxDialog((s) => ({ ...s, open }))}
       >
-        <DialogContent 
+        <DialogContent
           showCloseButton={false}
           className="max-w-6xl rounded-[32px] p-0 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-2xl max-h-[90vh] overflow-y-auto no-scrollbar"
         >

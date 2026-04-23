@@ -135,21 +135,18 @@ export default function DoctorDashboardPage() {
                   onClick={() => setIsActive((v) => !v)}
                 >
                   <div
-                    className={`w-12 h-6 rounded-full p-1 transition-colors duration-300 ${
-                      isActive ? "bg-emerald-500" : "bg-slate-300 dark:bg-slate-600"
-                    }`}
+                    className={`w-12 h-6 rounded-full p-1 transition-colors duration-300 ${isActive ? "bg-emerald-500" : "bg-slate-300 dark:bg-slate-600"
+                      }`}
                   >
                     <div
-                      className={`w-4 h-4 bg-white rounded-full shadow-sm transition-transform duration-300 ${
-                        isActive ? "translate-x-6" : "translate-x-0"
-                      }`}
+                      className={`w-4 h-4 bg-white rounded-full shadow-sm transition-transform duration-300 ${isActive ? "translate-x-6" : "translate-x-0"
+                        }`}
                     />
                   </div>
                   <span className="flex flex-col text-left">
                     <span
-                      className={`text-xs font-black uppercase tracking-wider ${
-                        isActive ? "text-emerald-600" : "text-slate-500"
-                      }`}
+                      className={`text-xs font-black uppercase tracking-wider ${isActive ? "text-emerald-600" : "text-slate-500"
+                        }`}
                     >
                       {isActive ? "Active" : "Inactive"}
                     </span>
@@ -366,11 +363,10 @@ export default function DoctorDashboardPage() {
                   return (
                     <div
                       key={appt.id}
-                      className={`relative group p-6 rounded-[24px] border transition-all duration-500 overflow-hidden ${
-                        isNext
+                      className={`relative group p-6 rounded-[24px] border transition-all duration-500 overflow-hidden ${isNext
                           ? "bg-gradient-to-br from-emerald-600 to-teal-700 text-white border-emerald-500 shadow-xl shadow-emerald-600/20 scale-[1.02] z-10"
                           : "bg-white text-slate-900 border-slate-100 hover:border-slate-200 hover:shadow-md dark:bg-slate-800/50 dark:text-white dark:border-slate-700"
-                      }`}
+                        }`}
                     >
                       {isNext && (
                         <div className="absolute top-0 right-0 p-4">
@@ -382,28 +378,25 @@ export default function DoctorDashboardPage() {
 
                       <div className="flex items-center gap-4 mb-4">
                         <div
-                          className={`w-14 h-14 rounded-2xl flex items-center justify-center font-bold text-xl shadow-sm border transition-colors ${
-                            isNext
+                          className={`w-14 h-14 rounded-2xl flex items-center justify-center font-bold text-xl shadow-sm border transition-colors ${isNext
                               ? "bg-white/10 border-white/20 text-white"
                               : "bg-slate-50 border-slate-100 text-slate-600 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-300"
-                          }`}
+                            }`}
                         >
                           {appt.patientName?.charAt(0)}
                         </div>
                         <div>
                           <p
-                            className={`font-black text-base tracking-tight ${
-                              isNext ? "text-white" : "text-slate-900 dark:text-white"
-                            }`}
+                            className={`font-black text-base tracking-tight ${isNext ? "text-white" : "text-slate-900 dark:text-white"
+                              }`}
                           >
                             {appt.patientName}
                           </p>
                           <div className="flex items-center gap-2 mt-0.5">
                             <Clock className={`h-3 w-3 ${isNext ? "text-emerald-200" : "text-slate-400"}`} />
                             <span
-                              className={`text-[10px] font-bold uppercase tracking-widest ${
-                                isNext ? "text-emerald-100" : "text-slate-500"
-                              }`}
+                              className={`text-[10px] font-bold uppercase tracking-widest ${isNext ? "text-emerald-100" : "text-slate-500"
+                                }`}
                             >
                               {new Date(appt.timeSlot)
                                 .toLocaleTimeString("en-IN", { hour: "numeric", minute: "2-digit" })
@@ -415,21 +408,19 @@ export default function DoctorDashboardPage() {
 
                       <div className="flex items-center justify-between mt-6">
                         <span
-                          className={`text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md ${
-                            appt.status === "confirmed"
+                          className={`text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md ${appt.status === "confirmed"
                               ? "bg-emerald-500/10 text-emerald-500"
                               : "bg-amber-500/10 text-amber-500"
-                          }`}
+                            }`}
                         >
                           {appt.status}
                         </span>
                         <Button
                           size="sm"
-                          className={`h-10 px-4 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all active:scale-95 ${
-                            isNext
+                          className={`h-10 px-4 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all active:scale-95 ${isNext
                               ? "bg-white text-emerald-700 hover:bg-emerald-50 shadow-lg shadow-black/10"
                               : "bg-slate-100 hover:bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-200"
-                          }`}
+                            }`}
                           onClick={() => (window.location.href = "/doctor/appointments")}
                         >
                           Add Prescription <Plus className="ml-1.5 h-3 w-3" strokeWidth={3} />
