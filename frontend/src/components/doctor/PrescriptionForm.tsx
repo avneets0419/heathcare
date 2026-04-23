@@ -71,8 +71,7 @@ export function PrescriptionForm({
         notes: values.notes ?? "",
       });
       onSuccess?.();
-    } catch (error) {
-      console.error("Failed to save prescription:", error);
+    } catch {
       setError("Failed to save prescription. Please try again.");
     } finally {
       setIsSubmitting(false);

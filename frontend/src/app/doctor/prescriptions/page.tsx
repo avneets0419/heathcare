@@ -143,8 +143,7 @@ export default function DoctorPrescriptionsPage() {
       try {
         const data = await getDoctorPrescriptions();
         setPrescriptions(data);
-      } catch (error) {
-        console.error("Failed to fetch doctor prescriptions:", error);
+      } catch {
         setPrescriptions(MOCK_PRESCRIPTIONS);
       } finally {
         setLoading(false);

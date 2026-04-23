@@ -5,17 +5,15 @@ import { getDoctorStats } from "@/services/doctor.service";
 import { getDoctorAppointments } from "@/services/appointment.service";
 import { DoctorStats } from "@/types/doctor.types";
 import { Appointment } from "@/types/appointment.types";
+import { StatCard } from "@/components/shared/StatCard";
+import { AppointmentCard } from "@/components/shared/AppointmentCard";
 import {
   CalendarDays,
   Clock,
   Users,
   FileText,
   Activity,
-  AlertTriangle,
-  TrendingUp,
-  UserCheck,
-  Plus,
-  MoreVertical,
+  Loader2,
 } from "lucide-react";
 import AuthGuard from "@/components/shared/AuthGuard";
 import { Button } from "@/components/ui/button";

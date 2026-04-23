@@ -42,8 +42,7 @@ export default function DoctorAvailabilityPage() {
       try {
         const data = await getDoctorSchedule();
         setSlots(data);
-      } catch (error) {
-        console.error("Failed to fetch doctor schedule:", error);
+      } catch {
         setSlots(MOCK_SLOTS);
       } finally {
         setLoading(false);

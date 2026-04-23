@@ -2,7 +2,7 @@
 
 import { Appointment, AppointmentStatus } from "@/types/appointment.types";
 import { Button } from "@/components/ui/button";
-import { Calendar, Clock, Trash2 } from "lucide-react";
+import { Calendar, Clock, User, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface AppointmentCardProps {

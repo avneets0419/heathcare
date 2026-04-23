@@ -3,13 +3,15 @@
 import { useEffect, useState, useCallback } from "react";
 import { getDoctorAppointments, cancelAppointment, completeAppointment } from "@/services/appointment.service";
 import { Appointment } from "@/types/appointment.types";
+import { AppointmentCard } from "@/components/shared/AppointmentCard";
 import { PrescriptionForm } from "@/components/doctor/PrescriptionForm";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogClose,
+  DialogHeader,
+  DialogTitle,
 } from "@/components/ui/dialog";
 import {
   Search,
@@ -116,8 +118,7 @@ export default function DoctorAppointmentsPage() {
     try {
       const data = await getDoctorAppointments();
       setAppointments(data);
-    } catch (error) {
-      console.error("Failed to fetch appointments:", error);
+    } catch {
       setAppointments(MOCK_APPOINTMENTS);
     } finally {
       setLoading(false);
@@ -135,30 +136,13 @@ export default function DoctorAppointmentsPage() {
       setAppointments((prev) =>
         prev.map((a) => (a.id === id ? { ...a, status: "cancelled" } : a))
       );
-    } catch (error) {
-      console.error("Failed to cancel appointment:", error);
+    } catch {
+      // optimistic update fallback – just mark locally
       setAppointments((prev) =>
         prev.map((a) => (a.id === id ? { ...a, status: "cancelled" } : a))
       );
     } finally {
       setCancelling(null);
-    }
-  };
-
-  const handleComplete = async (id: string) => {
-    setCompleting(id);
-    try {
-      await completeAppointment(id);
-      setAppointments((prev) =>
-        prev.map((a) => (a.id === id ? { ...a, status: "completed" } : a))
-      );
-    } catch (error) {
-      console.error("Failed to complete appointment:", error);
-      setAppointments((prev) =>
-        prev.map((a) => (a.id === id ? { ...a, status: "completed" } : a))
-      );
-    } finally {
-      setCompleting(null);
     }
   };
 

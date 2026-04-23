@@ -1,11 +1,12 @@
 "use client"
 
-import { Users, DollarSign, AlertTriangle, TrendingUp, UserPlus, MoreVertical } from "lucide-react";
+import { Users, DollarSign, AlertTriangle, TrendingUp, UserPlus, Clock, MoreVertical } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { adminDashboardService, DashboardStats } from "@/services/adminDashboard.service";
 import { useEffect, useState } from "react";
 import AuthGuard from "@/components/shared/AuthGuard";
+import { stat } from "fs";
 
 
 
@@ -16,11 +17,7 @@ export default function AdminDashboardPage() {
   const [traffic, setTraffic] = useState<number[]>([40, 60, 45, 95, 65, 80, 50]);
 
   useEffect(() => {
-    adminDashboardService.getTraffic()
-      .then(setTraffic)
-      .catch((error) => {
-        console.error("Failed to fetch traffic data:", error);
-      });
+    adminDashboardService.getTraffic().then(setTraffic).catch(() => { });
   }, []);
 
   useEffect(() => {
@@ -28,8 +25,7 @@ export default function AdminDashboardPage() {
       try {
         const data = await adminDashboardService.getStats();
         setStats(data);
-      } catch (error) {
-        console.error("Failed to load dashboard stats:", error);
+      } catch {
         setError("Failed to load dashboard");
       } finally {
         setLoading(false);
@@ -43,8 +39,10 @@ export default function AdminDashboardPage() {
   if (error) return <div className="p-6 text-red-500">{error}</div>;
   if (!stats) return null;
 
-  const max = Math.max(...traffic, 1);
+  const max = Math.max(...traffic);
+  const avg = Math.round(traffic.reduce((a, b) => a + b, 0) / traffic.length);
   const normalize = (val: number) => max === 0 ? 0 : Math.round((val / max) * 100);
+  const avgPct = normalize(avg);
 
 
   return (
@@ -331,5 +329,223 @@ export default function AdminDashboardPage() {
     </div>
   </AuthGuard>
 );
-}//   );
+}
+
+
+// "use client";
+
+// import { useEffect, useState } from "react";
+// import {
+//   Download,
+//   DollarSign,
+//   AlertTriangle,
+//   FileText,
+// } from "lucide-react";
+// import { Button } from "@/components/ui/button";
+
+// /* ✅ Strong typing */
+// interface DashboardData {
+//   revenue: number;
+//   patients: number;
+//   doctors: number;
+//   alerts: { id: string; message: string; type: string }[];
+//   traffic: { id: string; day: string; patientCount: number }[];
+//   appointments: {
+//     id: string;
+//     patientName: string;
+//     type: string;
+//     time: string;
+//     status: string;
+//   }[];
+// }
+
+// export default function AdminDashboardPage() {
+//   const [data, setData] = useState<DashboardData | null>(null);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState<string | null>(null);
+
+//   /* ✅ API URL (better practice) */
+//   const API_URL =
+//     process.env.NEXT_PUBLIC_API_URL ||
+//     "http://localhost:5001";
+
+//   useEffect(() => {
+//     const fetchDashboard = async () => {
+//       try {
+//         const res = await fetch(
+//           `${API_URL}/api/admin/dashboard`
+//         );
+
+//         if (!res.ok) {
+//           throw new Error("Failed to fetch dashboard");
+//         }
+
+//         const result: DashboardData = await res.json();
+//         setData(result);
+//       } catch (err: any) {
+//         setError(err.message);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchDashboard();
+//   }, [API_URL]);
+
+//   /* ✅ Loading State */
+//   if (loading)
+//     return (
+//       <div className="p-6 text-lg font-semibold">
+//         Loading dashboard...
+//       </div>
+//     );
+
+//   /* ✅ Error State */
+//   if (error)
+//     return (
+//       <div className="p-6 text-red-500">
+//         {error}
+//       </div>
+//     );
+
+//   /* ✅ Safety check */
+//   if (!data) return null;
+
+//   return (
+//     <div className="space-y-8 max-w-[1600px] mx-auto pb-12">
+
+//       {/* Header */}
+//       <div className="flex justify-between items-center">
+//         <div>
+//           <h1 className="text-4xl font-black">
+//             Control Center
+//           </h1>
+//           <p className="text-slate-500 mt-2">
+//             Real-time analytics and administrative tasks
+//           </p>
+//         </div>
+
+//         <div className="flex gap-4">
+//           <Button variant="outline">
+//             <Download className="mr-2 h-4 w-4" />
+//             Export
+//           </Button>
+//           <Button>
+//             <FileText className="mr-2 h-4 w-4" />
+//             Report
+//           </Button>
+//         </div>
+//       </div>
+
+//       {/* Alert */}
+//       <div className="bg-rose-50 border p-4 rounded-xl flex justify-between">
+//         <div className="flex gap-3 items-center">
+//           <AlertTriangle className="text-rose-500" />
+//           <div>
+//             <h4 className="font-bold">
+//               Immediate Action Required
+//             </h4>
+//             <p>
+//               {data.alerts?.[0]?.message ||
+//                 "No alerts available"}
+//             </p>
+//           </div>
+//         </div>
+//       </div>
+
+//       {/* KPI Cards */}
+//       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+//         {/* Revenue */}
+//         <div className="p-6 bg-emerald-600 text-white rounded-xl">
+//           <h3 className="font-bold flex items-center gap-2">
+//             <DollarSign /> Revenue
+//           </h3>
+//           <p className="text-3xl mt-2">
+//             ${data.revenue.toLocaleString()}
+//           </p>
+//         </div>
+
+//         {/* Patients */}
+//         <div className="p-6 bg-white rounded-xl shadow">
+//           <h3 className="text-slate-500">
+//             Total Patients
+//           </h3>
+//           <p className="text-3xl font-bold">
+//             {data.patients.toLocaleString()}
+//           </p>
+//         </div>
+
+//         {/* Doctors */}
+//         <div className="p-6 bg-white rounded-xl shadow">
+//           <h3 className="text-slate-500">
+//             Active Doctors
+//           </h3>
+//           <p className="text-3xl font-bold">
+//             {data.doctors}
+//           </p>
+//         </div>
+//       </div>
+
+//       {/* Traffic Chart */}
+//       <div className="p-6 bg-white rounded-xl shadow">
+//         <h3 className="font-bold mb-4">
+//           Traffic Density
+//         </h3>
+
+//         <div className="flex items-end gap-2 h-40">
+//           {data.traffic?.map((item) => (
+//             <div
+//               key={item.id}
+//               className="flex flex-col items-center"
+//             >
+//               <div
+//                 className="w-6 bg-emerald-500 rounded"
+//                 style={{
+//                   height: `${item.patientCount}%`,
+//                 }}
+//               />
+//               <span className="text-xs mt-1">
+//                 {item.day}
+//               </span>
+//             </div>
+//           ))}
+//         </div>
+//       </div>
+
+//       {/* Appointments */}
+//       <div className="p-6 bg-white rounded-xl shadow">
+//         <h3 className="font-bold mb-4">
+//           Upcoming Pipeline
+//         </h3>
+
+//         {data.appointments?.map((patient) => (
+//           <div
+//             key={patient.id}
+//             className="flex justify-between border-b py-2"
+//           >
+//             <div>
+//               <p className="font-semibold">
+//                 {patient.patientName}
+//               </p>
+//               <p className="text-sm text-slate-500">
+//                 {patient.type}
+//               </p>
+//             </div>
+
+//             <div>
+//               {patient.status === "active" ? (
+//                 <span className="text-green-600 font-bold">
+//                   LIVE
+//                 </span>
+//               ) : (
+//                 <span>{patient.time}</span>
+//               )}
+//             </div>
+//           </div>
+//         ))}
+//       </div>
+
+//     </div>
+//   );
 // }
