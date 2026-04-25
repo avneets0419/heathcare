@@ -34,8 +34,8 @@ const items = {
   patient: [
     { title: "Dashboard", url: "/patient/dashboard", icon: LayoutDashboard },
     { title: "Doctors", url: "/patient/doctors", icon: Users },
-    { title: "Book Appointment", url: "/patient/appointments/book", icon: Calendar },
-    { title: "Medical History", url: "/patient/medical-history", icon: FileText },
+    { title: "Appointments", url: "/patient/appointments", icon: Calendar },
+    { title: "Medical History", url: "/patient/history", icon: FileText },
     { title: "Profile", url: "/patient/profile", icon: Settings },
   ],
 };
@@ -63,17 +63,18 @@ export function AppSidebar({ role }: { role: "admin" | "doctor" | "patient" }) {
                 const isActive = pathname.startsWith(item.url);
                 return (
                   <SidebarMenuItem key={item.title}>
-                    {/* @ts-expect-error - Shadcn UI SidebarMenuButton uses Slot internally but types don't expose it correctly here */}
-                    <SidebarMenuButton asChild isActive={isActive} tooltip={item.title}>
-                      <Link href={item.url} className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-xl transition-all duration-200 group ${isActive ? "bg-emerald-50 text-emerald-800 font-bold dark:bg-emerald-900/40 dark:text-emerald-300" : "text-slate-500 font-semibold hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800/50 dark:hover:text-slate-200"}`}>
-                        <div className={`flex items-center justify-center transition-colors ${isActive ? "text-emerald-600 dark:text-emerald-400" : "text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300"}`}>
-                          <item.icon className="h-4 w-4" />
-                        </div>
-                        <span>{item.title}</span>
-                        {isActive && (
-                          <div className="ml-auto w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                        )}
-                      </Link>
+                    <SidebarMenuButton 
+                      isActive={isActive} 
+                      tooltip={item.title} 
+                      render={<Link href={item.url} className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-xl transition-all duration-200 group ${isActive ? "bg-emerald-50 text-emerald-800 font-bold dark:bg-emerald-900/40 dark:text-emerald-300" : "text-slate-500 font-semibold hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800/50 dark:hover:text-slate-200"}`} />}
+                    >
+                      <div className={`flex items-center justify-center transition-colors ${isActive ? "text-emerald-600 dark:text-emerald-400" : "text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300"}`}>
+                        <item.icon className="h-4 w-4" />
+                      </div>
+                      <span>{item.title}</span>
+                      {isActive && (
+                        <div className="ml-auto w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                      )}
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 );
